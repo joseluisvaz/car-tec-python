@@ -9,7 +9,8 @@ This project is going to be the platform for several projects about autonomous s
 This packagae has been developed and tested under ROS Kinetic and Ubuntu Xenial 16.04.
 
 **Author(s): Jose Vazquez, Francisco Perez, Mario Valdes, Erick Contreras**
-**Mainteinet: TBA**
+
+**Mainteiner: TBA**
 
 #### Further Documentation
 
