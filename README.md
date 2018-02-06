@@ -6,7 +6,14 @@ This repository is the ros-package needed for the capstone project for the degre
 
 This project is going to be the platform for several projects about autonomous systems on-campus and will lead to further development in the classes of Robotics and Capstone Project in Mechatronics Engineering.
 
-This packagae has been developed and tested under ROS Kinetic and Ubuntu Xenial 16.04.
+This packagae has been developed and tested under:
+
+**- ROS Kinetic**
+**- Ubuntu Xenial 16.04**
+
+Requirements:
+**- Python: 3.5.2**
+**- OpenCV: 3.4.0**
 
 **Author(s): Jose Vazquez, Francisco Perez, Mario Valdes, Erick Contreras**
 
