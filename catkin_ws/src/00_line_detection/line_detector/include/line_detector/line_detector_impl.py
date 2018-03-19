@@ -14,15 +14,15 @@ class LineDetectorImpl:
 
     def __init__(self):
         self.bridge = CvBridge()
-        self.image_sub = rospy.Subscriber("/zed/rgb/image_raw_color",
+        self.image_sub = rospy.Subscriber(rospy.get_param("~subscriber_topic"),
                                           Image,
                                           self.callback,
-                                          queue_size=1,
-                                          buff_size=52428800)
+                                          queue_size=rospy.get_param("~subs_queue_size"),
+                                          buff_size=rospy.get_param("~buff_size"))
 
-        self.image_pub = rospy.Publisher("/line_detector/output_image",
+        self.image_pub = rospy.Publisher(rospy.get_param("~publisher_topic"),
                                          Image,
-                                         queue_size=1)
+                                         queue_size=rospy.get_param("~pubs_queue_size"))
 
     def callback(self, data):
 
