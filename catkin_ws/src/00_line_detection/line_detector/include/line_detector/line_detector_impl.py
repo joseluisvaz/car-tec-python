@@ -47,8 +47,8 @@ class LineDetectorImpl:
 
 
 def main(args):
-    ic = LineDetectorImpl()
     rospy.init_node('line_detector', anonymous=True)
+    LineDetectorImpl()
     try:
         rospy.spin()
     except KeyboardInterrupt:
