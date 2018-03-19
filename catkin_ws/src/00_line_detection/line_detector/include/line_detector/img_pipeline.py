@@ -37,6 +37,9 @@ def img_pipeline(img, kernel_size=DEFAULT_KERNEL_SIZE):
     color_binary = cv2.bitwise_or(s_channel_binary, combined_binary)
     color_binary_cropped = region_cutter.cut_region(color_binary)
 
+    # Setting binary 1 to 255 (White)
+    color_binary_cropped[color_binary_cropped == 1] = 255
+
     return color_binary_cropped
 
 
@@ -66,5 +69,8 @@ def img_pipeline_2(img, kernel_size=DEFAULT_KERNEL_SIZE):
                  | ((s_channel_binary == 1) & (r_channel_binary == 1))] = 1
 
     color_binary_cropped = region_cutter.cut_region(color_binary)
+
+    # Setting binary 1 to 255 (White)
+    color_binary_cropped[color_binary_cropped == 1] = 255
 
     return color_binary_cropped
