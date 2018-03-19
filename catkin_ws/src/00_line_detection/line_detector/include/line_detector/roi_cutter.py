@@ -20,14 +20,14 @@ class RoiCutter(object):
         if self.shape is None:
             raise ValueError
 
-        left_bottom = (100, self.shape[0])
+        left_bottom = (20, self.shape[0])
         right_bottom = (self.shape[1] - 20, self.shape[0])
-        apex1 = (610, 410)
-        apex2 = (680, 410)
-        inner_left_bottom = (310, self.shape[0])
-        inner_right_bottom = (1150, self.shape[0])
-        inner_apex1 = (700, 480)
-        inner_apex2 = (650, 480)
+        apex1 = (310, 140)
+        apex2 = (350, 140)
+        inner_left_bottom = (40, self.shape[0])
+        inner_right_bottom = (self.shape[1] - 40, self.shape[0])
+        inner_apex1 = (340, 480)
+        inner_apex2 = (320, 480)
         self.vertices = np.array([[left_bottom, apex1, apex2,
                                    right_bottom, inner_right_bottom,
                                    inner_apex1, inner_apex2, inner_left_bottom]],
