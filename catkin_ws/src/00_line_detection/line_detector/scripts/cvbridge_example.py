@@ -1,33 +1,31 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-import roslib
 import sys
 import rospy
 import cv2
-from std_msgs.msg import String
+
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
-roslib.load_manifest('my_package')
 
-
-class image_converter:
+class ImageConverter:
 
     def __init__(self):
-        self.image_pub = rospy.Publisher("image_topic_2", Image)
-
+        self.frame_counter = 0
         self.bridge = CvBridge()
-        self.image_sub = rospy.Subscriber("image_topic", Image, self.callback)
+        self.image_sub = rospy.Subscriber("/zed/rgb/image_raw_color", Image, self.callback)
+        self.image_pub = rospy.Publisher("/line_detector/output_image", Image, queue_size=1)
 
     def callback(self, data):
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+            self.frame_counter += 1
         except CvBridgeError as e:
             print(e)
 
         (rows, cols, channels) = cv_image.shape
-        if cols > 60 and rows > 60 :
+        if cols > 60 and rows > 60:
             cv2.circle(cv_image, (50, 50), 10, 255)
 
         cv2.imshow("Image window", cv_image)
@@ -40,7 +38,7 @@ class image_converter:
 
 
 def main(args):
-    ic = image_converter()
+    ic = ImageConverter()
     rospy.init_node('image_converter', anonymous=True)
     try:
         rospy.spin()
@@ -51,4 +49,3 @@ def main(args):
 
 if __name__ == '__main__':
     main(sys.argv)
-    
