@@ -1,0 +1,17 @@
+subscriber_topic: /zed/rgb/image_raw_color
+publisher_topic: /line_detector/output_image
+subs_queue_size: 1
+pubs_queue_size: 1
+buff_size: 52428800
+
+img_size: [376, 672]
+
+# Values for Region of Interest (ROI) Cutter
+left_bottom: [20, 376]
+right_bottom: [652, 376]
+apex1: [310, 140]
+apex2: [350, 140]
+inner_left_bottom: [40, 376]
+inner_right_bottom: [336, 376]
+inner_apex1: [340, 480]
+inner_apex2: [320, 480]

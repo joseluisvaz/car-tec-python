@@ -1,0 +1,8 @@
+<launch>
+
+    <!-- Launch ROS line_detector Node -->
+    <node pkg="line_detector" type="line_detector_node.py" name="line_detector_devel" output="screen">
+        <rosparam command="load" file="zed_default.yaml" />
+    </node>
+
+</launch>
