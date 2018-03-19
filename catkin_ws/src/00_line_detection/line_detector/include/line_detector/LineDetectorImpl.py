@@ -9,7 +9,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
 
-class ImageConverter:
+class LineDetectorImpl:
 
     def __init__(self):
         self.bridge = CvBridge()
@@ -20,11 +20,7 @@ class ImageConverter:
 
         cv_image = self._to_cv_image(data)
 
-        (rows, cols, channels) = cv_image.shape
-        if cols > 60 and rows > 60:
-            cv2.circle(cv_image, (50, 50), 10, 255)
-
-        cv2.imshow("Image window", cv_image)
+        cv2.imshow("cropped_image", cv_image)
         cv2.waitKey(3)
 
         ros_img = self._to_ros_image(cv_image)
@@ -44,8 +40,8 @@ class ImageConverter:
 
 
 def main(args):
-    ic = ImageConverter()
-    rospy.init_node('image_converter', anonymous=True)
+    ic = LineDetectorImpl()
+    rospy.init_node('line_detector', anonymous=True)
     try:
         rospy.spin()
     except KeyboardInterrupt:

@@ -2,7 +2,7 @@
 
 import sys
 
-from line_detector import cvbridge_example
+from line_detector import LineDetectorImpl
 
 if __name__ == "__main__":
-    cvbridge_example.main(sys.argv)
+    LineDetectorImpl.main(sys.argv)
