@@ -68,4 +68,5 @@ catkin_ws/src/cmake-build-debug
 catkin_ws/src/.idea
 catkin_ws/src/zed-ros-wrapper
 fleet.html
-
+ 
+line-detector/data/*
