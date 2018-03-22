@@ -42,35 +42,3 @@ def img_pipeline(img, kernel_size=DEFAULT_KERNEL_SIZE):
 
     return color_binary_cropped
 
-
-def img_pipeline_2(img, kernel_size=DEFAULT_KERNEL_SIZE):
-
-    # Color Conversions
-    img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    img_hsl = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
-    r_channel = img[:, :, 0]
-    s_channel = img_hsl[:, :, 2]
-
-    # Initializes Region Cutter and sets its variables
-    region_cutter = RoiCutter()
-    region_cutter.set_img_shape(img_gray.shape)
-    region_cutter.set_vertices()
-
-    sobel_x_binary = component_sobel_tresh(img_gray, orientation="x", kernel_size=kernel_size, thresh=(10, 100))
-
-    r_channel_binary = cv2.inRange(r_channel, 200, 255)
-    r_channel_binary[r_channel_binary == 255] = 1
-
-    s_channel_binary = cv2.inRange(s_channel, 125, 255)
-    s_channel_binary[s_channel_binary == 255] = 1
-
-    color_binary = np.zeros_like(sobel_x_binary)
-    color_binary[((s_channel_binary == 1) & (sobel_x_binary == 1)) | ((sobel_x_binary == 1) & (r_channel_binary == 1))
-                 | ((s_channel_binary == 1) & (r_channel_binary == 1))] = 1
-
-    color_binary_cropped = region_cutter.cut_region(color_binary)
-
-    # Setting binary 1 to 255 (White)
-    color_binary_cropped[color_binary_cropped == 1] = 255
-
-    return color_binary_cropped
