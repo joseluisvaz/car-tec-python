@@ -4,45 +4,41 @@ from __future__ import print_function
 
 import rospy
 import cv2
-import numpy as np
 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-from img_pipeline import img_pipeline
 from line_detector import LineDetector
+from line_detector_hough import LineDetector2
+from line_detector_plot import drawLines
 
 
 class LineDetectorImpl:
 
     def __init__(self):
         self.bridge = CvBridge()
-        self.line_detection = LineDetector()
+        self.detector = LineDetector()
         self.image_sub = rospy.Subscriber(rospy.get_param("~subscriber_topic"),
                                           Image,
                                           self.callback,
                                           queue_size=rospy.get_param("~subs_queue_size"),
                                           buff_size=rospy.get_param("~buff_size"))
 
-        #self.image_pub = rospy.Publisher(rospy.get_param("~publisher_topic"),
-        #                                 Image,
-        #                                 queue_size=rospy.get_param("~pubs_queue_size"))
+        self.image_pub = rospy.Publisher(rospy.get_param("~publisher_topic"),
+                                         Image,
+                                         queue_size=rospy.get_param("~pubs_queue_size"))
 
     def callback(self, data):
 
         cv_image = self._to_cv_image(data)
 
-        _, white_lines = self.line_detection.detect(cv_image, "white")
-        _, yellow_lines = self.line_detection.detect(cv_image, "yellow")
-        _, red_lines = self.line_detection.detect(cv_image, "red")
+        self.detector.set_image(cv_image)
 
-        stack = np.hstack((yellow_lines, white_lines, red_lines))
-        cv2.imshow("normal", cv_image)
-        cv2.imshow("vstack", stack)
-        cv2.waitKey(3)
-        #img_cropped = img_pipeline(cv_image)
+        white_info = self.detector.detect("white")
+        drawLines(cv_image, white_info.lines, (0, 0, 255))
 
-        #ros_img = self._to_ros_image(img_cropped)
-        #self.image_pub.publish(ros_img)
+        ros_img = self._to_ros_image(cv_image)
+
+        self.image_pub.publish(ros_img)
 
     def _to_cv_image(self, data):
         try:
@@ -52,7 +48,7 @@ class LineDetectorImpl:
 
     def _to_ros_image(self, data):
         try:
-            return self.bridge.cv2_to_imgmsg(data, "mono8")
+            return self.bridge.cv2_to_imgmsg(data, "bgr8")
         except CvBridgeError as e:
             print(e)
 
