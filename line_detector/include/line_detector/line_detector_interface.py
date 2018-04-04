@@ -1,4 +1,8 @@
 from abc import ABCMeta, abstractmethod
+from collections import namedtuple
+
+Detections = namedtuple('Detections',
+                        ['lines', 'normals', 'area', 'centers'])
 
 
 class LineDetectorInterface():
