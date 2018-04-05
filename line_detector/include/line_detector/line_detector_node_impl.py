@@ -7,13 +7,16 @@ import cv2
 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-from img_pipeline import img_pipeline
+from line_detector import LineDetector
+from line_detector_hough import LineDetector2
+from line_detector_plot import drawLines
 
 
 class LineDetectorImpl:
 
     def __init__(self):
         self.bridge = CvBridge()
+        self.detector = LineDetector()
         self.image_sub = rospy.Subscriber(rospy.get_param("~subscriber_topic"),
                                           Image,
                                           self.callback,
@@ -28,9 +31,13 @@ class LineDetectorImpl:
 
         cv_image = self._to_cv_image(data)
 
-        img_cropped = img_pipeline(cv_image)
+        self.detector.set_image(cv_image)
 
-        ros_img = self._to_ros_image(img_cropped)
+        white_info = self.detector.detect("white")
+        drawLines(cv_image, white_info.lines, (0, 0, 255))
+
+        ros_img = self._to_ros_image(cv_image)
+
         self.image_pub.publish(ros_img)
 
     def _to_cv_image(self, data):
@@ -41,7 +48,7 @@ class LineDetectorImpl:
 
     def _to_ros_image(self, data):
         try:
-            return self.bridge.cv2_to_imgmsg(data, "mono8")
+            return self.bridge.cv2_to_imgmsg(data, "bgr8")
         except CvBridgeError as e:
             print(e)
 

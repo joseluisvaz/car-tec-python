@@ -8,10 +8,10 @@ default_sobel_kernel_size: 7
 img_size: [376, 672]
 
 # Values for Region of Interest (ROI) Cutter
-left_bottom: [20, 376]
-right_bottom: [652, 376]
-apex1: [310, 140]
-apex2: [350, 140]
+left_bottom: [145, 376]
+right_bottom: [672, 315]
+apex1: [300, 210]
+apex2: [360, 210]
 inner_left_bottom: [40, 376]
 inner_right_bottom: [336, 376]
 inner_apex1: [340, 480]
