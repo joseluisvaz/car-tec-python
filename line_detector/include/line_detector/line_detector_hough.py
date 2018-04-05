@@ -4,10 +4,10 @@ import numpy as np
 
 from line_detector_interface import LineDetectorInterface
 from line_detector_interface import Detections
-from img_pipeline import img_pipeline
 from roi_cutter import RoiCutter
 
-class LineDetector2(LineDetectorInterface):
+
+class LineDetectorHough(LineDetectorInterface):
 
     def __init__(self):
         self.bw_image = None
@@ -23,7 +23,7 @@ class LineDetector2(LineDetectorInterface):
         self.roi_cutter.set_img_shape(self.bw_image.shape)
         self.roi_cutter.set_vertices()
 
-        self.edges = self._find_edges(self.bw_image)
+        self.edges = self._find_edges(rgb_image)
 
     def detect(self, color):
         bw, edge_color = self._color_filter(color)
@@ -56,8 +56,8 @@ class LineDetector2(LineDetectorInterface):
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,
                                            (dilatation_kernel_size, dilatation_kernel_size))
         # EDGES FOR CERTAIN COLOR
-        # QUICK HACK ERASE AFTER DEMO  ------ dilatation = cv2.dilate(filtered, kernel)
         dilatation = cv2.dilate(filtered, kernel)
+
         edge_color = cv2.bitwise_and(dilatation,
                                      self.edges)
         return filtered, edge_color
@@ -76,43 +76,7 @@ class LineDetector2(LineDetectorInterface):
             lines = []
         return lines
 
-    def _lineFilter(self, bw, edge_color):
-        # find gradient of the bw image
-        grad_x = -cv2.Sobel(bw/255, cv2.CV_32F, 1, 0, ksize=5)
-        grad_y = -cv2.Sobel(bw/255, cv2.CV_32F, 0, 1, ksize=5)
-        grad_x *= (edge_color == 255)
-        grad_y *= (edge_color == 255)
-
-        # compute gradient and thresholding
-        grad = np.sqrt(grad_x**2 + grad_y**2)
-        roi = (grad > rospy.get_param("~color_config/sobel_threshold"))
-
-        # turn into a list of points and normals
-        roi_y, roi_x = np.nonzero(roi)
-        centers = np.vstack((roi_x, roi_y)).transpose()
-        normals = np.vstack((grad_x[roi], grad_y[roi])).transpose()
-        normals /= np.sqrt(np.sum(normals**2, axis=1, keepdims=True))
-
-        lines = self._synthesizeLines(centers, normals)
-
-        return lines, normals, centers
-
-    def _synthesizeLines(self, centers, normals):
-        lines = []
-        if len(centers)>0:
-            x1 = (centers[:,0:1] + normals[:, 1:2] * 6.).astype('int')
-            y1 = (centers[:,1:2] - normals[:, 0:1] * 6.).astype('int')
-            x2 = (centers[:,0:1] - normals[:, 1:2] * 6.).astype('int')
-            y2 = (centers[:,1:2] + normals[:, 0:1] * 6.).astype('int')
-            x1 = self._check_bounds(x1, self.hsv_image.shape[1])
-            y1 = self._check_bounds(y1, self.hsv_image.shape[0])
-            x2 = self._check_bounds(x2, self.hsv_image.shape[1])
-            y2 = self._check_bounds(y2, self.hsv_image.shape[0])
-            lines = np.hstack([x1, y1, x2, y2])
-        return lines
-
     def _find_edges(self, bw_image):
-
         canny = cv2.Canny(bw_image,
                           self.canny_thresholds[0],
                           self.canny_thresholds[1],
