@@ -12,13 +12,15 @@ class LineDetectorSobel(LineDetectorInterface):
     def __init__(self):
         self.bw_image = None
         self.hsv_image = None
+        self.hls_image = None
         self.edges = None
         self.roi_cutter = RoiCutter()
         self.canny_thresholds = rospy.get_param("~color_config/canny_threshold")
 
-    def set_image(self, rgb_image):
-        self.bw_image = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2GRAY)
-        self.hsv_image = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2HSV)
+    def set_image(self, bgr_image):
+        self.bw_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
+        self.hsv_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2HSV)
+        self.hls_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2HLS)
 
         self.roi_cutter.set_img_shape(self.bw_image.shape)
         self.roi_cutter.set_vertices()
@@ -32,18 +34,18 @@ class LineDetectorSobel(LineDetectorInterface):
 
     def _color_filter(self, color):
         if color == "white":
-            filtered = cv2.inRange(self.hsv_image,
-                                   tuple(rospy.get_param("~color_config/hsv_white1")),
-                                   tuple(rospy.get_param("~color_config/hsv_white2")))
+            filtered = cv2.inRange(self.hls_image,
+                                   tuple(rospy.get_param("~color_config/hls_white1")),
+                                   tuple(rospy.get_param("~color_config/hls_white2")))
         elif color == "yellow":
-            filtered = cv2.inRange(self.hsv_image,
-                                   tuple(rospy.get_param("~color_config/hsv_yellow1")),
-                                   tuple(rospy.get_param("~color_config/hsv_yellow2")))
+            filtered = cv2.inRange(self.hls_image,
+                                   tuple(rospy.get_param("~color_config/hls_yellow1")),
+                                   tuple(rospy.get_param("~color_config/hls_yellow2")))
         elif color == "red":
-            filtered1 = cv2.inRange(self.hsv_image,
+            filtered1 = cv2.inRange(self.hls_image,
                                     tuple(rospy.get_param("~color_config/hsv_red1")),
                                     tuple(rospy.get_param("~color_config/hsv_red2")))
-            filtered2 = cv2.inRange(self.hsv_image,
+            filtered2 = cv2.inRange(self.hls_image,
                                     tuple(rospy.get_param("~color_config/hsv_red3")),
                                     tuple(rospy.get_param("~color_config/hsv_red4")))
             filtered = cv2.bitwise_and(filtered1, filtered2)

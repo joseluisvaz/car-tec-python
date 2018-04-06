@@ -6,7 +6,7 @@
     <node pkg="line_detector" type="line_detector_node.py"
           name="line_detector" output="screen"
           clear_params="true" required="true">
-        <rosparam command="load" file="zed_default_bag.yaml"/>
+        <rosparam command="load" file="$(find line_detector)/config/zed_default_bag.yaml"/>
     </node>
 
 </launch>

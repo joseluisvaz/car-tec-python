@@ -35,8 +35,8 @@ class RoiCutter(object):
                                    apex2,
                                    right_bottom,
                                    inner_right_bottom,
-                                   inner_apex1,
                                    inner_apex2,
+                                   inner_apex1,
                                    inner_left_bottom]],
                                  dtype=np.int32)
 
