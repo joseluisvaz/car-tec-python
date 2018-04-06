@@ -30,6 +30,10 @@ class LineDetectorImpl:
                                             Image,
                                             queue_size=rospy.get_param("~pubs_queue_size"))
 
+        self.edges_pub = rospy.Publisher(rospy.get_param("~publisher_topic3"),
+                                         Image,
+                                         queue_size=rospy.get_param("~pubs_queue_size"))
+
     def callback(self, data):
 
         cv_image = self._to_cv_image(data)
@@ -37,13 +41,17 @@ class LineDetectorImpl:
         self.detector.set_image(cv_image)
 
         white_info = self.detector.detect("white")
+        yellow_info = self.detector.detect("yellow")
         drawLines(cv_image, white_info.lines, (0, 0, 255))
+        drawLines(cv_image, yellow_info.lines, (0, 255, 0))
 
         ros_img = self._to_ros_image_color(cv_image)
-        color_filter_img = self._to_ros_image_color_bw(white_info.area)
+        color_filter_img = self._to_ros_image_bw(yellow_info.area)
+        edges_img = self._to_ros_image_bw(self.detector.edges)
 
         self.image_pub.publish(ros_img)
         self.image_pub_bw.publish(color_filter_img)
+        self.edges_pub.publish(edges_img)
 
     def _to_cv_image(self, data):
         try:
@@ -57,7 +65,7 @@ class LineDetectorImpl:
         except CvBridgeError as e:
             print(e)
 
-    def _to_ros_image_color_bw(self, data):
+    def _to_ros_image_bw(self, data):
         try:
             return self.bridge.cv2_to_imgmsg(data, "mono8")
         except CvBridgeError as e:
