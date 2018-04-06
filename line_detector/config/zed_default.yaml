@@ -1,5 +1,8 @@
 subscriber_topic: /zed/rgb/image_raw_color
 publisher_topic: /line_detector/output_image
+publisher_topic2: /line_detector/threshold_image
+
+publisher_topic3: /line_detector/edges
 subs_queue_size: 1
 pubs_queue_size: 1
 buff_size: 52428800
@@ -27,8 +30,12 @@ color_config:
 
   hsv_white1:  [0,0,150]
   hsv_white2:  [180,50,255]
+  hls_white1:  [0, 200, 0]
+  hls_white2:  [180, 255, 255]
   hsv_yellow1: [25,120,90]
   hsv_yellow2: [45,255,255]
+  hls_yellow1: [15, 38, 115]
+  hls_yellow2: [35, 204, 255]
   hsv_red1:    [0,140,100]
   hsv_red2:    [15,255,255]
   hsv_red3:    [165,140,100]
