@@ -49,7 +49,7 @@ class LineDetectorImpl:
 
         white_info = self.detector.detect("white")
         yellow_info = self.detector.detect("yellow")
-        
+
         drawLines(cv_image, white_info.lines, COLOR_RED)
         drawLines(cv_image, yellow_info.lines, COLOR_GREEN)
 
