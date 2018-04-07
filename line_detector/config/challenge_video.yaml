@@ -1,7 +1,9 @@
 subscriber_topic: /videofile/image_raw
-publisher_topic: /line_detector/output_image
-publisher_topic2: /line_detector/threshold_image
-publisher_topic3: /line_detector/edges
+
+publisher_topic_1: /line_detector/output_image
+publisher_topic_2: /line_detector/edges
+publisher_topic_3: /line_detector/threshold_image_white
+publisher_topic_4: /line_detector/threshold_image_yellow
 
 subs_queue_size: 1
 pubs_queue_size: 1

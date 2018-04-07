@@ -1,6 +1,6 @@
 <launch>
 
-    <node pkg="rosbag" type="play" name="rosbag" args="-l $(find line_detector)/data/test_video.bag" />
+    <node pkg="rosbag" type="play" name="rosbag" args="-l $(find line_detector)/data/test_video_car.bag" />
 
     <!-- Launch ROS line_detector Node -->
     <node pkg="line_detector" type="line_detector_node.py"

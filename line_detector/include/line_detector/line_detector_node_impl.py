@@ -10,6 +10,9 @@ from cv_bridge import CvBridge, CvBridgeError
 from line_detector_hough import LineDetectorHough
 from line_detector_plot import drawLines
 
+COLOR_RED = (0, 0, 255)
+COLOR_GREEN = (0, 255, 0)
+
 
 class LineDetectorImpl:
 
@@ -22,17 +25,21 @@ class LineDetectorImpl:
                                           queue_size=rospy.get_param("~subs_queue_size"),
                                           buff_size=rospy.get_param("~buff_size"))
 
-        self.image_pub = rospy.Publisher(rospy.get_param("~publisher_topic"),
+        self.image_pub = rospy.Publisher(rospy.get_param("~publisher_topic_1"),
                                          Image,
                                          queue_size=rospy.get_param("~pubs_queue_size"))
 
-        self.image_pub_bw = rospy.Publisher(rospy.get_param("~publisher_topic2"),
-                                            Image,
-                                            queue_size=rospy.get_param("~pubs_queue_size"))
-
-        self.edges_pub = rospy.Publisher(rospy.get_param("~publisher_topic3"),
+        self.edges_pub = rospy.Publisher(rospy.get_param("~publisher_topic_2"),
                                          Image,
                                          queue_size=rospy.get_param("~pubs_queue_size"))
+
+        self.white_back_pub = rospy.Publisher(rospy.get_param("~publisher_topic_3"),
+                                              Image,
+                                              queue_size=rospy.get_param("~pubs_queue_size"))
+
+        self.yellow_back_pub = rospy.Publisher(rospy.get_param("~publisher_topic_4"),
+                                               Image,
+                                               queue_size=rospy.get_param("~pubs_queue_size"))
 
     def callback(self, data):
 
@@ -42,16 +49,20 @@ class LineDetectorImpl:
 
         white_info = self.detector.detect("white")
         yellow_info = self.detector.detect("yellow")
-        drawLines(cv_image, white_info.lines, (0, 0, 255))
-        drawLines(cv_image, yellow_info.lines, (0, 255, 0))
+        
+        drawLines(cv_image, white_info.lines, COLOR_RED)
+        drawLines(cv_image, yellow_info.lines, COLOR_GREEN)
 
         ros_img = self._to_ros_image_color(cv_image)
-        color_filter_img = self._to_ros_image_bw(yellow_info.area)
         edges_img = self._to_ros_image_bw(self.detector.edges)
+        white_back_img = self._to_ros_image_bw(white_info.area)
+        yellow_back_img = self._to_ros_image_bw(yellow_info.area)
 
         self.image_pub.publish(ros_img)
-        self.image_pub_bw.publish(color_filter_img)
         self.edges_pub.publish(edges_img)
+        self.white_back_pub.publish(white_back_img)
+        self.yellow_back_pub.publish(yellow_back_img)
+
 
     def _to_cv_image(self, data):
         try:
