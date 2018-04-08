@@ -63,7 +63,6 @@ class LineDetectorImpl:
         self.white_back_pub.publish(white_back_img)
         self.yellow_back_pub.publish(yellow_back_img)
 
-
     def _to_cv_image(self, data):
         try:
             return self.bridge.imgmsg_to_cv2(data, "bgr8")
@@ -83,7 +82,7 @@ class LineDetectorImpl:
             print(e)
 
 
-def main(args):
+def main():
     rospy.init_node('line_detector', anonymous=True)
     LineDetectorImpl()
     try:
