@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import cv2
 import rospy
 import numpy as np
@@ -86,11 +88,11 @@ class LineDetectorSobel(LineDetectorInterface):
 
     def _synthesize_lines(self, centers, normals):
         lines = []
-        if len(centers)>0:
-            x1 = (centers[:,0:1] + normals[:, 1:2] * 6.).astype('int')
-            y1 = (centers[:,1:2] - normals[:, 0:1] * 6.).astype('int')
-            x2 = (centers[:,0:1] - normals[:, 1:2] * 6.).astype('int')
-            y2 = (centers[:,1:2] + normals[:, 0:1] * 6.).astype('int')
+        if len(centers) > 0:
+            x1 = (centers[:, 0:1] + normals[:, 1:2] * 6.).astype('int')
+            y1 = (centers[:, 1:2] - normals[:, 0:1] * 6.).astype('int')
+            x2 = (centers[:, 0:1] - normals[:, 1:2] * 6.).astype('int')
+            y2 = (centers[:, 1:2] + normals[:, 0:1] * 6.).astype('int')
             x1 = self._check_bounds(x1, self.hsv_image.shape[1])
             y1 = self._check_bounds(y1, self.hsv_image.shape[0])
             x2 = self._check_bounds(x2, self.hsv_image.shape[1])
@@ -110,7 +112,8 @@ class LineDetectorSobel(LineDetectorInterface):
 
         return self.roi_cutter.cut_region(canny)
 
-    def _check_bounds(self, val, bound):
+    @staticmethod
+    def _check_bounds(val, bound):
         val[val < 0] = 0
         val[val >= bound] = bound - 1
         return val

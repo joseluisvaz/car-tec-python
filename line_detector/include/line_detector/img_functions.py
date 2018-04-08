@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import cv2
 import numpy as np
 
@@ -20,7 +22,7 @@ def component_sobel_tresh(img_grayscale, orientation="x", kernel_size=3, thresh=
     return binary_output
 
 
-def magnitude_sobel_thresh(img_grayscale, kernel_size=3, thresh=(0,255)):
+def magnitude_sobel_thresh(img_grayscale, kernel_size=3, thresh=(0, 255)):
 
     grad_x = cv2.Sobel(img_grayscale, cv2.CV_64F, 1, 0, ksize=kernel_size)
     grad_y = cv2.Sobel(img_grayscale, cv2.CV_64F, 0, 1, ksize=kernel_size)
