@@ -1,5 +1,6 @@
+#!/usr/bin/env python
+
 import cv2
-import numpy as np
 
 from img_functions import component_sobel_tresh
 from img_functions import magnitude_sobel_thresh
@@ -41,4 +42,3 @@ def img_pipeline(img, kernel_size=DEFAULT_KERNEL_SIZE):
     color_binary_cropped[color_binary_cropped == 1] = 255
 
     return color_binary_cropped
-
