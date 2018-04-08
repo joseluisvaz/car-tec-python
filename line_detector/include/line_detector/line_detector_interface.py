@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 
@@ -5,7 +7,7 @@ Detections = namedtuple('Detections',
                         ['lines', 'normals', 'area', 'centers'])
 
 
-class LineDetectorInterface():
+class LineDetectorInterface:
     __metaclass__ = ABCMeta
 
     @abstractmethod
