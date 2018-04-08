@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import cv2
 import rospy
 import numpy as np
@@ -64,10 +66,11 @@ class LineDetectorHough(LineDetectorInterface):
                                      self.edges)
         return filtered, edge_color
 
-    def _hough_filter(self, edge):
-        lines = cv2.HoughLinesP(edge,                                 # image
-                                1,                                    # rho
-                                np.pi/180,                            # theta
+    @staticmethod
+    def _hough_filter(edge):
+        lines = cv2.HoughLinesP(edge,                                              # image
+                                1,                                                 # rho
+                                np.pi/180,                                         # theta
                                 rospy.get_param("~color_config/hough_threshold"),  # threshold
                                 lines=np.empty(1),
                                 minLineLength=rospy.get_param("~color_config/hough_min_line_length"),
@@ -89,12 +92,14 @@ class LineDetectorHough(LineDetectorInterface):
 
         return self.roi_cutter.cut_region(canny)
 
-    def _check_bounds(self, val, bound):
+    @staticmethod
+    def _check_bounds(val, bound):
         val[val < 0] = 0
         val[val >= bound] = bound - 1
         return val
 
-    def _correct_pixel_ordering(self, lines, normals):
+    @staticmethod
+    def _correct_pixel_ordering(lines, normals):
         flag = ((lines[:, 2]-lines[:, 0])*normals[:, 1] - (lines[:, 3]-lines[:, 1])*normals[:, 0]) > 0
         for i in range(len(lines)):
             if flag[i]:
@@ -104,12 +109,12 @@ class LineDetectorHough(LineDetectorInterface):
     def _find_normal(self, bw, lines):
         normals = []
         centers = []
-        if len(lines)>0:
-            length = np.sum((lines[:, 0:2] -lines[:, 2:4])**2, axis=1, keepdims=True)**0.5
+        if len(lines) > 0:
+            length = np.sum((lines[:, 0:2] - lines[:, 2:4])**2, axis=1, keepdims=True)**0.5
             dx = 1. * (lines[:, 3:4]-lines[:, 1:2])/length
             dy = 1. * (lines[:, 0:1]-lines[:, 2:3])/length
 
-            centers = np.hstack([(lines[:,0:1]+lines[:,2:3])/2, (lines[:,1:2]+lines[:,3:4])/2])
+            centers = np.hstack([(lines[:, 0:1]+lines[:, 2:3])/2, (lines[:, 1:2]+lines[:, 3:4])/2])
             x3 = (centers[:, 0:1] - 3.*dx).astype('int')
             y3 = (centers[:, 1:2] - 3.*dy).astype('int')
             x4 = (centers[:, 0:1] + 3.*dx).astype('int')
