@@ -8,7 +8,7 @@ import cv2
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from line_detector_hough import LineDetectorHough
-from line_detector_plot import drawLines
+from line_detector_plot import draw_lines
 
 COLOR_RED = (0, 0, 255)
 COLOR_GREEN = (0, 255, 0)
@@ -50,8 +50,8 @@ class LineDetectorImpl:
         white_info = self.detector.detect("white")
         yellow_info = self.detector.detect("yellow")
 
-        drawLines(cv_image, white_info.lines, COLOR_RED)
-        drawLines(cv_image, yellow_info.lines, COLOR_GREEN)
+        draw_lines(cv_image, white_info.lines, COLOR_RED)
+        draw_lines(cv_image, yellow_info.lines, COLOR_GREEN)
 
         ros_img = self._to_ros_image_color(cv_image)
         edges_img = self._to_ros_image_bw(self.detector.edges)
