@@ -5,6 +5,8 @@ publisher_topic_2: /line_detector/edges
 publisher_topic_3: /line_detector/threshold_image_white
 publisher_topic_4: /line_detector/threshold_image_yellow
 
+publisher_topic_segments: /line_detector/segment_list
+
 subs_queue_size: 1
 pubs_queue_size: 1
 buff_size: 52428800

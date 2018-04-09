@@ -16,3 +16,7 @@ class LineDetectorInterface:
 
     def detect_lines(self, color):
         pass
+
+    @abstractmethod
+    def get_norm_ratio(self):
+        pass
