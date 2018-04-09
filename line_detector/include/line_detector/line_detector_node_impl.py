@@ -69,9 +69,6 @@ class LineDetectorImpl:
             lines_normalized_yellow = yellow_info.lines * self.detector.get_norm_ratio()
             segment_list.segments.extend(to_segment_msg(lines_normalized_yellow, yellow_info.normals, Segment.YELLOW))
 
-        print("# Segments published {} white and {} yellow".format(len(white_info.lines),
-                                                                   len(yellow_info.lines)))
-
         draw_lines(cv_image, white_info.lines, COLOR_RED)
         draw_lines(cv_image, yellow_info.lines, COLOR_GREEN)
 
