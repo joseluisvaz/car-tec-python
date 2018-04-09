@@ -6,11 +6,12 @@ import rospy
 import cv2
 
 from sensor_msgs.msg import Image
-from sensor_msgs.msg import CompressedImage
+from car_tec_msgs.msg import Segment
 from car_tec_msgs.msg import SegmentList
 from cv_bridge import CvBridge
 from line_detector_hough import LineDetectorHough
 from line_detector_plot import draw_lines
+from utils.segments import to_segment_msg
 
 
 COLOR_RED = (0, 0, 255)
@@ -45,6 +46,10 @@ class LineDetectorImpl:
                                                Image,
                                                queue_size=rospy.get_param("~pubs_queue_size"))
 
+        self.segments_pub = rospy.Publisher(rospy.get_param("~publisher_topic_segments"),
+                                            SegmentList,
+                                            queue_size=rospy.get_param("~pubs_queue_size"))
+
     def callback(self, img_msg):
 
         cv_image = self.bridge.imgmsg_to_cv2(img_msg, "bgr8")
@@ -55,6 +60,17 @@ class LineDetectorImpl:
         yellow_info = self.detector.detect("yellow")
 
         segment_list = SegmentList()
+        segment_list.header.stamp = img_msg.header.stamp
+
+        if len(white_info.lines) > 0:
+            lines_normalized_white = white_info.lines * self.detector.get_norm_ratio()
+            segment_list.segments.extend(to_segment_msg(lines_normalized_white, white_info.normals, Segment.WHITE))
+        if len(yellow_info.lines) > 0:
+            lines_normalized_yellow = yellow_info.lines * self.detector.get_norm_ratio()
+            segment_list.segments.extend(to_segment_msg(lines_normalized_yellow, yellow_info.normals, Segment.YELLOW))
+
+        print("# Segments published {} white and {} yellow".format(len(white_info.lines),
+                                                                   len(yellow_info.lines)))
 
         draw_lines(cv_image, white_info.lines, COLOR_RED)
         draw_lines(cv_image, yellow_info.lines, COLOR_GREEN)
@@ -68,6 +84,7 @@ class LineDetectorImpl:
         self.edges_pub.publish(edges_img)
         self.white_back_pub.publish(white_back_img)
         self.yellow_back_pub.publish(yellow_back_img)
+        self.segments_pub.publish(segment_list)
 
 
 def main():
