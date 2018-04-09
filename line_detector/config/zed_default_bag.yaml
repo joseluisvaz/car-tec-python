@@ -13,14 +13,14 @@ default_sobel_kernel_size: 7
 img_size: [376, 672]
 
 # Values for Region of Interest (ROI) Cutter
-left_bottom: [0, 200]
-right_bottom: [672, 200]
-apex1: [300, 70]
-apex2: [360, 70]
-inner_left_bottom: [0, 376]
-inner_right_bottom: [672, 376]
-inner_apex1: [10, 376]
-inner_apex2: [30, 376]
+left_bottom: [50,230]
+right_bottom: [622, 230]
+apex1: [300, 80]
+apex2: [360, 80]
+inner_left_bottom: [50, 230]
+inner_right_bottom: [622, 230]
+inner_apex1: [180, 230]
+inner_apex2: [500, 230]
 
 color_config:
   dilatation_kernel_size: 3
@@ -32,7 +32,7 @@ color_config:
 
   hsv_white1:  [0,0,150]
   hsv_white2:  [180,50,255]
-  hls_white1:  [0, 200, 0]
+  hls_white1:  [0, 150, 0]
   hls_white2:  [180, 255, 255]
   hsv_yellow1: [25,120,90]
   hsv_yellow2: [45,255,255]
