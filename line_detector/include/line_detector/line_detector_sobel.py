@@ -119,3 +119,9 @@ class LineDetectorSobel(LineDetectorInterface):
         val[val < 0] = 0
         val[val >= bound] = bound - 1
         return val
+
+    def get_norm_ratio(self):
+        return np.array((1./self.image_size[1],
+                         1./self.image_size[0],
+                         1./self.image_size[1],
+                         1./self.image_size[0]))

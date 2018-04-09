@@ -130,3 +130,9 @@ class LineDetectorHough(LineDetectorInterface):
 
             self._correct_pixel_ordering(lines, normals)
         return centers, normals
+
+    def get_norm_ratio(self):
+        return np.array((1./self.image_size[1],
+                         1./self.image_size[0],
+                         1./self.image_size[1],
+                         1./self.image_size[0]))

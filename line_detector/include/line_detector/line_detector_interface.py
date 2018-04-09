@@ -14,5 +14,10 @@ class LineDetectorInterface:
     def set_image(self, bgr):
         pass
 
+    @abstractmethod
     def detect_lines(self, color):
+        pass
+
+    @abstractmethod
+    def get_norm_ratio(self):
         pass
