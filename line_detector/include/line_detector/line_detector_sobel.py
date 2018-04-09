@@ -15,6 +15,7 @@ class LineDetectorSobel(LineDetectorInterface):
         self.bw_image = None
         self.hsv_image = None
         self.hls_image = None
+        self.image_size = None
         self.edges = None
         self.roi_cutter = RoiCutter()
         self.canny_thresholds = rospy.get_param("~color_config/canny_threshold")
@@ -23,6 +24,7 @@ class LineDetectorSobel(LineDetectorInterface):
         self.bw_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
         self.hsv_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2HSV)
         self.hls_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2HLS)
+        self.image_size = bgr_image.shape[0:2]
 
         self.roi_cutter.set_img_shape(self.bw_image.shape)
         self.roi_cutter.set_vertices()
