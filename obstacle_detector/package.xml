@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>obstacle_detectorn</name>
+  <name>obstacle_detector</name>
   <version>0.0.0</version>
   <description>The obstacle_detector package</description>
 
