@@ -1,0 +1,21 @@
+<launch>
+
+    <!-- Launch depthimage_to_laserscan -->
+
+    <arg name="image" default="/zed/depth/depth_registered" />
+    <arg name="frame_id" default="zed_left_camera" />
+    <arg name="scan_height" default="1" />
+    <arg name="scan_time" default="0.33" />
+    <arg name="range_min" default="0.45" />
+    <arg name="range_max" default="10.0" />
+
+
+    <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="laser_scan"
+          args="image:=$(arg image)
+                _output_frame_id:=$(arg frame_id)
+                _scan_height:=$(arg scan_height)
+                _scan_time:=$(arg scan_time)
+                _range_min:=$(arg range_min)
+                _range_max:=$(arg range_max)" />
+
+</launch>
