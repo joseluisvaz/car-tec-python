@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>birds_eye_view</name>
+  <name>birds_eye</name>
   <version>0.0.0</version>
-  <description>The birds_eye_view package</description>
+  <description>The birds_eye package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
