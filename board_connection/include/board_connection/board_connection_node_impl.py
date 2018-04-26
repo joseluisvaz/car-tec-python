@@ -6,7 +6,7 @@ import rospy
 
 from car_tec_msgs.msg import Segment
 from car_tec_msgs.msg import SegmentList
-from std_msgs.msg import Int32
+from std_msgs.msg import Float32MultiArray
 
 
 class BoardConnectionImpl(object):
@@ -19,12 +19,15 @@ class BoardConnectionImpl(object):
                                             buff_size=rospy.get_param("~buff_size"))
 
         self.control_pub = rospy.Publisher(rospy.get_param("~publisher_topic"),
-                                           Int32,
+                                           Float32MultiArray,
                                            queue_size=rospy.get_param("~pubs_queue_size"))
 
     def callback(self, segment_list):
         self.segment_list = segment_list
-        self.control_pub.publish(len(self.segment_list.segments))
+        a = len(self.segment_list.segments)*1.111
+        array = Float32MultiArray()
+        array.data = [a, a]
+        self.control_pub.publish(array)
 
 
 def main():
