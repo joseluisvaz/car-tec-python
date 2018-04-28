@@ -1,0 +1,13 @@
+<launch>
+
+    <!-- Launch ZED Camera Node -->
+    <include file="$(find line_detector)/launch/webcam.launch"/>
+
+    <!-- Launch ROS line_detector Node -->
+    <node pkg="line_detector" type="line_detector_node.py"
+          name="line_detector" output="screen"
+          clear_params="true" required="true">
+        <rosparam command="load" file="$(find line_detector)/config/webcam.yaml"/>
+    </node>
+
+</launch>
