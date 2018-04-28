@@ -8,6 +8,8 @@ import cv2
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
+from birds_eye.utils import unwarp
+
 
 class BirdsEyeImpl(object):
     def __init__(self):
@@ -25,7 +27,8 @@ class BirdsEyeImpl(object):
 
     def callback(self, img_msg):
         cv_image = self.bridge.imgmsg_to_cv2(img_msg, "bgr8")
-        ros_image = self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
+        a, b, c = unwarp.corners_unwarp(cv_image)
+        ros_image = self.bridge.cv2_to_imgmsg(a, "bgr8")
         self.image_pub.publish(ros_image)
 
 
