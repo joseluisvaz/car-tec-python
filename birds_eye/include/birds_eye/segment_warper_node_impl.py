@@ -28,6 +28,7 @@ class SegmentWarperImpl(object):
                                            SegmentList,
                                            queue_size=rospy.get_param("~pubs_queue_size"))
 
+    # TODO: VECTORIZE THIS CODE
     def warp_vector(self, vector):
         """
         Vector [2x1]
