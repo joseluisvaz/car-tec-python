@@ -1,8 +1,10 @@
-subscriber_topic_1: /videofile/image_raw
-subscriber_topic_2: /line_detector/segment_list
+subscriber_topic_1: /line_detector/segment_list
 
-publisher_topic_1: /birds_eye/image
-publisher_topic_2: /birds_eye/image2
+publisher_topic_1: /birds_eye/segment_list
+
+homography: [[-6.24454148e-01, -1.50764192e+00, 1.03724891e+03], [-7.66053887e-15, -1.96506550e+00, 9.03930131e+02], [-9.86623977e-18, -2.37445415e-03, 1.00000000e+00]]
+
+segment_warper_sub_1: /line_detector/segment_list
 
 subs_queue_size: 1
 pubs_queue_size: 1
