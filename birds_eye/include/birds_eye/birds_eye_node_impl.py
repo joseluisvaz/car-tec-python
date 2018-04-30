@@ -53,11 +53,13 @@ class BirdsEyeImpl(object):
             self.configured = True
 
         self.warper.set_image(img)           # Set image for use in callback_segment
+        print(self.warper.H)
 
         warped_img = self.warper.warp_image(img)
         ros_image = self.bridge.cv2_to_imgmsg(warped_img, "bgr8")
         self.image_pub.publish(ros_image)
 
+    # TODO: VECTORIZE THIS CODE
     def warp_vector(self, vector):
         """
         Vector [2x1]
@@ -75,7 +77,6 @@ class BirdsEyeImpl(object):
         if not self.configured:
             return None
 
-        new_segment_list = SegmentList()
         new_img = self.warper.warp_image(self.warper.img)
 
         p1_color=(0, 255, 0)
