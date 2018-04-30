@@ -62,6 +62,8 @@ class LineDetectorImpl:
         segment_list = SegmentList()
         segment_list.header.stamp = img_msg.header.stamp
 
+
+        # TODO: Change name of functions which say unormalized
         if len(white_info.lines) > 0:
             lines_normalized_white = white_info.lines #* self.detector.get_norm_ratio()
             segment_list.segments.extend(to_segment_msg(lines_normalized_white, white_info.normals, Segment.WHITE))

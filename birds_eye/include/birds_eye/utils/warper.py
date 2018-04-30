@@ -11,6 +11,8 @@ AREA_OF_INTEREST = [[150 + 430, 460], [1150 - 440, 460], [1150, 720], [150, 720]
 class Warper(object):
 
     def __init__(self):
+        self.img = None
+        self.warped_img = None
         self.width = None
         self.height = None
         self.img_size = None
@@ -22,6 +24,11 @@ class Warper(object):
         if img_size == self.img_size:
             return True
         return False
+
+    def set_image(self, img):
+        if not self.check_img_size(img):
+            raise ValueError("img_sizes do not match")
+        self.img = img
 
     def set_image_size(self, img):
         self.width = img.shape[0]
@@ -45,6 +52,7 @@ class Warper(object):
 
         self.H = cv2.getPerspectiveTransform(src, dst)
         self.H_inv = cv2.getPerspectiveTransform(dst, src)
+        self.warped_img = cv2.warpPerspective(img, self.H, self.img_size)
 
         return self.H, self.H_inv
 

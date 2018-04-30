@@ -2,7 +2,7 @@ subscriber_topic_1: /videofile/image_raw
 subscriber_topic_2: /line_detector/segment_list
 
 publisher_topic_1: /birds_eye/image
-publisher_topic_2: /birds_eye/segment_list
+publisher_topic_2: /birds_eye/image2
 
 subs_queue_size: 1
 pubs_queue_size: 1
