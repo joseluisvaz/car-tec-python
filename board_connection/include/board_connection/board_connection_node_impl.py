@@ -14,7 +14,7 @@ class BoardConnectionImpl(object):
         self.segment_list = None
         self.counter = 0
         self.direction = "right"
-        rospy.Rate(10)
+        rospy.Rate(100)
         self.segment_sub = rospy.Subscriber(rospy.get_param("~subscriber_topic"),
                                             SegmentList,
                                             self.callback,
@@ -28,17 +28,17 @@ class BoardConnectionImpl(object):
     def callback(self, segment_list):
         self.segment_list = segment_list
         if self.counter <= 270 and self.direction == "right":
-            self.counter += 3
+            self.counter += 0.5
         elif self.counter > 270 and self.direction == "right":
             self.direction = "left"
         elif self.counter < -270 and self.direction == "left":
             self.direction = "right"
         elif self.counter >= -270 and self.direction == "left":
-            self.counter -= 3
+            self.counter -= 0.5
 
         a = len(self.segment_list.segments)*1.111
         array = Float32MultiArray()
-        array.data = [270, 270]
+        array.data = [self.counter, self.counter]
         self.control_pub.publish(array)
 
 
