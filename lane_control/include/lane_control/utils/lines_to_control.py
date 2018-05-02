@@ -43,18 +43,35 @@ def line_means(segment_list):
     mean_center_y = 0
 
     for line in segments_to_lines(segment_list):
-        if line.inclination == float('inf') or (line.length > min_length and line.inclination > min_inclination):
+        if line.inclination == float('inf') or (line.length > min_length
+                                                and line.inclination > min_inclination):
+                                                #and line.color == 0):
             count_valid_line += 1
             mean_center_x += line.center_x
             mean_center_y += line.center_y
 
     if count_valid_line == 0:
         mean_center_x = 0
-        mean_center_y= 0
+        mean_center_y = 0
     else:
         mean_center_x /= count_valid_line
         mean_center_y /= count_valid_line
 
     return ControlInfo(u1=mean_center_x, u2=mean_center_y)
+
+
+def lines_to_array(segment_list):
+
+    data_array = np.zeros((1, 2))
+
+    for line in segments_to_lines(segment_list):
+        if line.inclination == float('inf') or (line.length > min_length
+                                                and line.inclination > min_inclination):
+            vector = np.array([[line.center_x, line.center_y]])
+            data_array = np.concatenate((data_array, vector), axis=0)
+
+    return np.array(data_array[1:])
+
+
 
 
