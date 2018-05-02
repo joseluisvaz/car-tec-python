@@ -1,0 +1,17 @@
+<launch>
+
+    <!-- Launch ZED Camera Node -->
+    <include file="$(find birds_eye)/launch/segment_warper.launch"/>
+
+    <!-- Launch ROS line_detector Node -->
+    <node pkg="lane_control" type="lane_control_node.py"
+          name="lane_control" output="screen"
+          clear_params="true" required="true">
+        <rosparam command="load" file="$(find lane_control)/config/default.yaml"/>
+    </node>
+
+    <!-- Run rosserial Node for communication -->
+    <node pkg="rosserial_python" type="serial_node.py" name="board_node"
+          args="/dev/ttyACM0"/>
+
+</launch>

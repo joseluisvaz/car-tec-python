@@ -1,11 +1,8 @@
-subscriber_topic: /line_detector/segment_list
+image_topic: /line_detector/output_image
+subscriber_topic_1: /birds_eye/segment_list
 
-publisher_topic: /board_connection/control_array
-publisher_topic_2: /line_detector/edges
-publisher_topic_3: /line_detector/threshold_image_white
-publisher_topic_4: /line_detector/threshold_image_yellow
-
-publisher_topic_segments: /line_detector/segment_list
+publisher_topic_1: /lane_control/control_signal
+publisher_topic_board: /board_connection/control_array
 
 subs_queue_size: 1
 pubs_queue_size: 1
