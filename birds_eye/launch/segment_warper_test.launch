@@ -1,5 +1,8 @@
 <launch>
 
+    <!-- Launch ZED Camera Node -->
+    <include file="$(find line_detector)/launch/video.launch"/>
+
     <!-- Launch ROS line_detector Node -->
     <node pkg="birds_eye" type="segment_warper_node.py"
           name="segment_warper" output="screen"

@@ -1,7 +1,7 @@
 <launch>
 
     <!-- Launch ZED Camera Node -->
-    <include file="$(find birds_eye)/launch/segment_warper.launch"/>
+    <include file="segment_warper_test.launch"/>
 
     <!-- Launch ROS line_detector Node -->
     <node pkg="lane_control" type="lane_control_node.py"

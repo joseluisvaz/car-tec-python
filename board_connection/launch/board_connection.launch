@@ -1,7 +1,7 @@
 <launch>
 
     <!-- Launch ZED Camera Node -->
-    <include file="$(find line_detector)/launch/line_detector_video.launch"/>
+    <include file="video.launch"/>
 
     <!-- Launch ROS line_detector Node -->
     <node pkg="board_connection" type="board_connection_node.py"
