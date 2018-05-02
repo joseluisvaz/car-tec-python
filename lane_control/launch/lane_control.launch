@@ -1,0 +1,9 @@
+<launch>
+
+    <node pkg="lane_control" type="lane_control_node.py"
+          name="lane_control" output="screen"
+          clear_params="true" required="true">
+        <rosparam command="load" file="$(find lane_control)/config/default.yaml"/>
+    </node>
+
+</launch>
