@@ -1,13 +1,13 @@
 <launch>
 
     <!-- Launch ZED Camera Node -->
-    <include file="$(find line_detector)/launch/video_file.launch"/>
+    <include file="$(find line_detector)/launch/hardware/zed.launch"/>
 
     <!-- Launch ROS line_detector Node -->
     <node pkg="line_detector" type="line_detector_node.py"
           name="line_detector" output="screen"
           clear_params="true" required="true">
-        <rosparam command="load" file="$(find line_detector)/config/challenge_video.yaml"/>
+        <rosparam command="load" file="$(find line_detector)/config/zed_default.yaml"/>
     </node>
 
 </launch>
