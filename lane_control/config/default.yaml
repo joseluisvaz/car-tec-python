@@ -1,8 +1,8 @@
 image_topic: /line_detector/output_image
-subscriber_topic_1: /birds_eye/segment_list
 
-publisher_topic_1: /lane_control/control_signal
-publisher_topic_board: /board_connection/control_array
+subscriber_topic: /birds_eye/segment_list
+
+publisher_topic: /lane_control/control_signal
 
 subs_queue_size: 1
 pubs_queue_size: 1

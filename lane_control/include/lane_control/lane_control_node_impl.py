@@ -30,13 +30,13 @@ class LaneControlImpl(object):
         self.reference_pixel_x = int(self.img_size_x/2)
         self.reference_pixel_y = int(self.img_size_y/2)
 
-        self.segment_sub = rospy.Subscriber(rospy.get_param("~subscriber_topic_1"),
+        self.segment_sub = rospy.Subscriber(rospy.get_param("~subscriber_topic"),
                                             SegmentList,
                                             self.callback,
                                             queue_size=rospy.get_param("~subs_queue_size"),
                                             buff_size=rospy.get_param("~buff_size"))
 
-        self.control_pub = rospy.Publisher(rospy.get_param("~publisher_topic_board"),
+        self.control_pub = rospy.Publisher(rospy.get_param("~publisher_topic"),
                                            Float32MultiArray,
                                            queue_size=rospy.get_param("~pubs_queue_size"))
 

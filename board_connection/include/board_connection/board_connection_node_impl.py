@@ -11,12 +11,8 @@ from std_msgs.msg import Float32MultiArray
 
 class BoardConnectionImpl(object):
     def __init__(self):
-        self.segment_list = None
-        self.counter = 0
-        self.direction = "right"
-        rospy.Rate(100)
         self.segment_sub = rospy.Subscriber(rospy.get_param("~subscriber_topic"),
-                                            SegmentList,
+                                            Float32MultiArray,
                                             self.callback,
                                             queue_size=rospy.get_param("~subs_queue_size"),
                                             buff_size=rospy.get_param("~buff_size"))
@@ -25,21 +21,8 @@ class BoardConnectionImpl(object):
                                            Float32MultiArray,
                                            queue_size=rospy.get_param("~pubs_queue_size"))
 
-    def callback(self, segment_list):
-        self.segment_list = segment_list
-        if self.counter <= 270 and self.direction == "right":
-            self.counter += 0.5
-        elif self.counter > 270 and self.direction == "right":
-            self.direction = "left"
-        elif self.counter < -270 and self.direction == "left":
-            self.direction = "right"
-        elif self.counter >= -270 and self.direction == "left":
-            self.counter -= 0.5
-
-        a = len(self.segment_list.segments)*1.111
-        array = Float32MultiArray()
-        array.data = [self.counter, self.counter]
-        self.control_pub.publish(array)
+    def callback(self, control):
+        self.control_pub.publish(control)
 
 
 def main():
