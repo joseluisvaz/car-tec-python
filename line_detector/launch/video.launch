@@ -7,7 +7,7 @@
     <node pkg="line_detector" type="line_detector_node.py"
           name="line_detector" output="screen"
           clear_params="true" required="true">
-        <rosparam command="load" file="$(find line_detector)/config/challenge_video.yaml"/>
+        <rosparam command="load" file="$(find line_detector)/config/expo_video.yaml"/>
     </node>
 
 </launch>
