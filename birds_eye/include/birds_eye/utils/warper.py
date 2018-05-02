@@ -5,7 +5,8 @@ from geometry_msgs.msg import Point
 from car_tec_msgs.msg import Pixel
 from car_tec_msgs.msg import Vector2D
 
-AREA_OF_INTEREST = [[150 + 430, 460], [1150 - 440, 460], [1150, 720], [150, 720]]
+AREA_OF_INTEREST_2 = [[150 + 430, 460], [1150 - 440, 460], [1150, 720], [150, 720]]
+AREA_OF_INTEREST = [[580, 290], [700, 290], [1280, 650], [0, 650]]
 
 
 class Warper(object):

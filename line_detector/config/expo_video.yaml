@@ -1,25 +1,28 @@
-image_topic: /line_detector/output_image
+subscriber_topic: /videofile/image_raw
 
-subscriber_topic: /birds_eye/segment_list
+publisher_topic_1: /line_detector/output_image
+publisher_topic_2: /line_detector/edges
+publisher_topic_3: /line_detector/threshold_image_white
+publisher_topic_4: /line_detector/threshold_image_yellow
 
-publisher_topic: /lane_control/control_signal
+publisher_topic_segments: /line_detector/segment_list
 
 subs_queue_size: 1
 pubs_queue_size: 1
 buff_size: 52428800
 default_sobel_kernel_size: 7
 
-img_size: [376, 672]
+img_size: [720, 1280]
 
 # Values for Region of Interest (ROI) Cutter
-left_bottom: [20, 376]
-right_bottom: [652, 376]
-apex1: [310, 140]
-apex2: [350, 140]
-inner_left_bottom: [40, 376]
-inner_right_bottom: [336, 376]
-inner_apex1: [340, 480]
-inner_apex2: [320, 480]
+left_bottom: [0, 650]
+right_bottom: [1280, 650]
+apex1: [540, 290]
+apex2: [680, 290]
+inner_left_bottom: [0, 650]
+inner_right_bottom: [1280, 650]
+inner_apex1: [30, 550]
+inner_apex2: [1250, 550]
 
 color_config:
   dilatation_kernel_size: 3
@@ -31,7 +34,7 @@ color_config:
 
   hsv_white1:  [0,0,150]
   hsv_white2:  [180,50,255]
-  hls_white1:  [0, 200, 0]
+  hls_white1:  [0, 170, 0]
   hls_white2:  [180, 255, 255]
   hsv_yellow1: [25,120,90]
   hsv_yellow2: [45,255,255]

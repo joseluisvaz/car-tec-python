@@ -1,9 +1,7 @@
 <launch>
 
-    <!-- Launch ZED Camera Node -->
-    <include file="$(find line_detector)/launch/line_detector_video.launch"/>
+    <include file="$(find line_detector)/launch/video.launch"/>
 
-    <!-- Launch ROS line_detector Node -->
     <node pkg="birds_eye" type="birds_eye_node.py"
           name="birds_eye" output="screen"
           clear_params="true" required="true">

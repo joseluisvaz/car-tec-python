@@ -53,9 +53,8 @@ class BirdsEyeImpl(object):
             self.configured = True
 
         self.warper.set_image(img)           # Set image for use in callback_segment
-        print(self.warper.H)
-
         warped_img = self.warper.warp_image(img)
+        print(self.warper.H)
         ros_image = self.bridge.cv2_to_imgmsg(warped_img, "bgr8")
         self.image_pub.publish(ros_image)
 

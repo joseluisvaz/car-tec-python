@@ -11,6 +11,7 @@ from std_msgs.msg import Float32MultiArray
 from sensor_msgs.msg import Image
 
 from utils.lines_to_control import line_means
+from utils.lines_to_control import lines_to_array
 
 MOVING_MEAN_SIZE = 100
 
@@ -30,13 +31,13 @@ class LaneControlImpl(object):
         self.reference_pixel_x = int(self.img_size_x/2)
         self.reference_pixel_y = int(self.img_size_y/2)
 
-        self.segment_sub = rospy.Subscriber(rospy.get_param("~subscriber_topic_1"),
+        self.segment_sub = rospy.Subscriber(rospy.get_param("~subscriber_topic"),
                                             SegmentList,
                                             self.callback,
                                             queue_size=rospy.get_param("~subs_queue_size"),
                                             buff_size=rospy.get_param("~buff_size"))
 
-        self.control_pub = rospy.Publisher(rospy.get_param("~publisher_topic_board"),
+        self.control_pub = rospy.Publisher(rospy.get_param("~publisher_topic"),
                                            Float32MultiArray,
                                            queue_size=rospy.get_param("~pubs_queue_size"))
 
@@ -44,6 +45,9 @@ class LaneControlImpl(object):
 
         # control.u1 control.u2
         control_sample = line_means(segment_list)
+        lines_array = lines_to_array(segment_list)
+        print(lines_array)
+
         self.control_list_x.append(control_sample.u1)
         self.control_list_y.append(control_sample.u2)
         self.control_list_x.pop(0)
@@ -55,12 +59,13 @@ class LaneControlImpl(object):
         error_x = self.reference_pixel_x - control_x
         error_y = self.reference_pixel_y - control_y
 
-        # Proportional Control
-        Kp = 4
+
+        # GEAR RELATION
+        Kp = 3
         array = Float32MultiArray()
         array.data = [Kp*error_x, Kp*error_y]
 
-        if self.MESSAGE_COUNTER == 5:
+        if self.MESSAGE_COUNTER == 1:
             self.control_pub.publish(array)
             self.MESSAGE_COUNTER = 0
         self.MESSAGE_COUNTER += 1

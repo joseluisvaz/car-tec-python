@@ -1,5 +1,8 @@
 <launch>
 
+
+    <include file="$(find line_detector)/launch/hardware/zed.launch"/>
+
     <!-- Launch depthimage_to_laserscan -->
 
     <arg name="image" default="/zed/depth/depth_registered" />
