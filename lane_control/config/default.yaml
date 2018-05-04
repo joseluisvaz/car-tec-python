@@ -1,4 +1,7 @@
-image_topic: /line_detector/output_image
+#image_topic: /line_detector/output_image
+image_topic_1: /birds_eye/image2
+image_topic_2: /line_detector/output_image
+
 
 subscriber_topic: /birds_eye/segment_list
 

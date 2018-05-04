@@ -6,10 +6,10 @@ from car_tec_msgs.msg import SegmentList
 from car_tec_msgs.msg import Segment
 
 LineInfo = namedtuple('LineInfo', ['x1', 'y1', 'x2', 'y2', 'center_x', 'center_y', 'length', 'inclination', 'color'])
-ControlInfo = namedtuple('Control', ['u1', 'u2'])
+ControlInfo = namedtuple('Control', ['u1', 'u2', 'count'])
 
-min_length = 3
-min_inclination = 0.8
+min_length = 1
+min_inclination = 0.1
 
 
 # TODO Implement kalman or particle filter for a dynamic model of the lanes
@@ -27,13 +27,26 @@ def segments_to_lines(segment_list):
         else:
             inclination = (y2-y1) / (x2-x1)
 
-        line = LineInfo(x1=x1, y1=y1, x2=x2, y2=y2,
+        line = LineInfo(x1=int(x1), y1=int(y1), x2=int(x2), y2=int(y2),
                         length=np.sqrt((x1-x2)**2 + (y1+y2**2)),
                         inclination=inclination,
                         center_x=(x2+x1)/2,
                         center_y=(y2+y1)/2,
                         color=segment.color)
         yield line
+
+
+def line_to_points(line):
+    if line.inclination < 0:
+        in_x = list(range(line.x2, line.x1 + 1))
+        in_y = list(range(line.y2, line.y1 + 1))
+    else:
+        in_x = list(range(line.x1, line.x2 + 1))
+        in_y = list(range(line.y1, line.y2 + 1))
+
+    print(len(in_x), len(in_y))
+    array = np.concatenate((np.array(in_x, ndmin=2), np.array(in_y, ndmin=2)), axis=0)
+    return np.transpose(array)
 
 
 def line_means(segment_list):
@@ -44,8 +57,7 @@ def line_means(segment_list):
 
     for line in segments_to_lines(segment_list):
         if line.inclination == float('inf') or (line.length > min_length
-                                                and line.inclination > min_inclination):
-                                                #and line.color == 0):
+                                                and abs(line.inclination) > min_inclination):
             count_valid_line += 1
             mean_center_x += line.center_x
             mean_center_y += line.center_y
@@ -57,7 +69,50 @@ def line_means(segment_list):
         mean_center_x /= count_valid_line
         mean_center_y /= count_valid_line
 
-    return ControlInfo(u1=mean_center_x, u2=mean_center_y)
+    return ControlInfo(u1=mean_center_x, u2=mean_center_y, count=count_valid_line)
+
+
+def get_point_array(segment_list):
+
+    count_valid_line = 0
+    mean_center_x = 0
+    mean_center_y = 0
+    point_list = []
+    point_array = None
+    count = 0
+
+    for line in segments_to_lines(segment_list):
+        if line.inclination == float('inf') or (line.length > min_length
+                                                and abs(line.inclination) > min_inclination):
+            point_list.append(line_to_points(line))
+            count_valid_line += 1
+            mean_center_x += line.center_x
+            mean_center_y += line.center_y
+
+    if count_valid_line == 0:
+        mean_center_x = 0
+        mean_center_y = 0
+    else:
+        point_array = np.concatenate(point_list, axis=0)
+        mean_center_x /= count_valid_line
+        mean_center_y /= count_valid_line
+        count = point_array.shape[0]
+
+    return point_array, count
+
+
+def unwrapslines(segment_list):
+
+    data_array = np.zeros((1, 4))
+
+    for line in segments_to_lines(segment_list):
+        if line.inclination == float('inf') or (line.length > min_length
+                                                and abs(line.inclination) > min_inclination):
+                                                #and line.center_x < 640):
+            vector = np.array([[line.x1, line.x2, line.y1, line.y2]])
+            data_array = np.concatenate((data_array, vector), axis=0)
+
+    return np.array(data_array[1:])
 
 
 def lines_to_array(segment_list):
@@ -66,7 +121,9 @@ def lines_to_array(segment_list):
 
     for line in segments_to_lines(segment_list):
         if line.inclination == float('inf') or (line.length > min_length
-                                                and line.inclination > min_inclination):
+                                                and line.inclination > min_inclination
+                                                and line.center_x < 640):
+
             vector = np.array([[line.center_x, line.center_y]])
             data_array = np.concatenate((data_array, vector), axis=0)
 
