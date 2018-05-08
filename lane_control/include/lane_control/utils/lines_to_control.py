@@ -110,24 +110,3 @@ def line_means(segment_list):
         mean_center_y /= count_valid_line
 
     return LineMeansInfo(mean_x=mean_center_x, mean_y=mean_center_y, count=count_valid_line)
-
-
-def lines_to_array(segment_list):
-    """
-    Filters segments and returns array with the centers of these segments
-    :param segment_list:
-    :return: array of line centers
-    """
-
-    data_array = np.zeros((1, 2))
-
-    for line in segment_to_line(segment_list):
-        if line.inclination == float('inf') or (line.length > min_length
-                                                and line.inclination > min_inclination
-                                                and line.center_x < 640):
-
-            vector = np.array([[line.center_x, line.center_y]])
-            data_array = np.concatenate((data_array, vector), axis=0)
-
-    # Index array to erase first row
-    return np.array(data_array[1:])
