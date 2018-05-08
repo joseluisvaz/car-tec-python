@@ -13,6 +13,7 @@ buff_size: 52428800
 default_sobel_kernel_size: 7
 
 img_size: [720, 1280]
+verbose: 1
 
 # Values for Region of Interest (ROI) Cutter
 left_bottom: [20, 376]

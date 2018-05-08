@@ -5,7 +5,7 @@ COLOR_RED = (0, 0, 255)
 COLOR_GREEN = (0, 255, 0)
 
 
-def draw_linear_regression(self, activated_pixels, slope_left, slope_right, intercept_left, intercept_right):
+def draw_linear_regression(activated_pixels, slope_left, slope_right, intercept_left, intercept_right):
     """
     Prints verbously a cv image in a window just for debuggins purposes
     :param activated_pixels:
@@ -17,23 +17,25 @@ def draw_linear_regression(self, activated_pixels, slope_left, slope_right, inte
     """
 
     offset_x = 0
-    point1 = (int(450 * slope_left + intercept_left) + offset_x, 450)
-    point2 = (int(600 * slope_left + intercept_left) + offset_x, 600)
-    point3 = (int(450 * slope_right + intercept_right) + offset_x, 450)
-    point4 = (int(600 * slope_right + intercept_right) + offset_x, 600)
 
-    theta = np.arctan2(point1[0], point1[1]) * 180/np.pi
+    if slope_left is not None:
+        point1 = (int(450 * slope_left + intercept_left) + offset_x, 450)
+        point2 = (int(600 * slope_left + intercept_left) + offset_x, 600)
 
-    cv2.arrowedLine(activated_pixels,
-                    point2,
-                    point1,
-                    COLOR_GREEN,
-                    2)
-    cv2.arrowedLine(activated_pixels,
-                    point4,
-                    point3,
-                    COLOR_RED,
-                    2)
+        cv2.arrowedLine(activated_pixels,
+                        point2,
+                        point1,
+                        COLOR_GREEN,
+                        2)
+
+    if slope_right is not None:
+        point3 = (int(450 * slope_right + intercept_right) + offset_x, 450)
+        point4 = (int(600 * slope_right + intercept_right) + offset_x, 600)
+        cv2.arrowedLine(activated_pixels,
+                        point4,
+                        point3,
+                        COLOR_RED,
+                        2)
 
     cv2.imshow("linear_regression", activated_pixels)
     cv2.waitKey(1)

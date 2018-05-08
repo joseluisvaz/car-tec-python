@@ -42,7 +42,7 @@ def segment_to_line(segment_list):
         yield line
 
 
-def unwraps_right(segment_list):
+def get_right_segments(segment_list):
     """
     Takes list of segments an returns a line of the filtered segments of the rightmost curve (lane)
     :param segment_list:
@@ -51,10 +51,12 @@ def unwraps_right(segment_list):
 
     data_array = np.zeros((1, 4))
 
+    center_x_pixel = rospy.get_param("~img_size")[1]/2
+
     for line in segment_to_line(segment_list):
         if line.inclination == float('inf') or (line.length > min_length
                                                 and abs(line.inclination) > min_inclination
-                                                and line.center_x > rospy.get_param("~img_size")):
+                                                and line.center_x > center_x_pixel):
             vector = np.array([[line.x1, line.x2, line.y1, line.y2]])
             data_array = np.concatenate((data_array, vector), axis=0)
 
@@ -62,7 +64,7 @@ def unwraps_right(segment_list):
     return np.array(data_array[1:])
 
 
-def unwraps_left(segment_list):
+def get_left_segments(segment_list):
     """
     Takes list of segments an returns a line of the filtered segments of the leftmost curve (lane)
     :param segment_list:
@@ -71,10 +73,12 @@ def unwraps_left(segment_list):
 
     data_array = np.zeros((1, 4))
 
+    center_x_pixel = rospy.get_param("~img_size")[1]/2
+
     for line in segment_to_line(segment_list):
         if line.inclination == float('inf') or (line.length > min_length
                                                 and abs(line.inclination) > min_inclination
-                                                and line.center_x < rospy.get_param("~img_size")):
+                                                and line.center_x < center_x_pixel):
             vector = np.array([[line.x1, line.x2, line.y1, line.y2]])
             data_array = np.concatenate((data_array, vector), axis=0)
 
