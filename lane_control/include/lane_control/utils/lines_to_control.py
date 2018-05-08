@@ -1,15 +1,12 @@
 import numpy as np
-import scipy
 from collections import namedtuple
 
-from car_tec_msgs.msg import SegmentList
-from car_tec_msgs.msg import Segment
 
 LineInfo = namedtuple('LineInfo', ['x1', 'y1', 'x2', 'y2', 'center_x', 'center_y', 'length', 'inclination', 'color'])
 ControlInfo = namedtuple('Control', ['u1', 'u2', 'count'])
 
 min_length = 1
-min_inclination = 0.1
+min_inclination = 0.4
 
 
 # TODO Implement kalman or particle filter for a dynamic model of the lanes
@@ -101,14 +98,28 @@ def get_point_array(segment_list):
     return point_array, count
 
 
-def unwrapslines(segment_list):
+def unwraps_left(segment_list):
 
     data_array = np.zeros((1, 4))
 
     for line in segments_to_lines(segment_list):
         if line.inclination == float('inf') or (line.length > min_length
-                                                and abs(line.inclination) > min_inclination):
-                                                #and line.center_x < 640):
+                                                and abs(line.inclination) > min_inclination#):
+                                                and line.center_x < 640):
+            vector = np.array([[line.x1, line.x2, line.y1, line.y2]])
+            data_array = np.concatenate((data_array, vector), axis=0)
+
+    return np.array(data_array[1:])
+
+
+def unwraps_right(segment_list):
+
+    data_array = np.zeros((1, 4))
+
+    for line in segments_to_lines(segment_list):
+        if line.inclination == float('inf') or (line.length > min_length
+                                                and abs(line.inclination) > min_inclination#):
+                                                and line.center_x > 640):
             vector = np.array([[line.x1, line.x2, line.y1, line.y2]])
             data_array = np.concatenate((data_array, vector), axis=0)
 
