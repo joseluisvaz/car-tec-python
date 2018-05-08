@@ -1,17 +1,26 @@
+import rospy
 import numpy as np
 from collections import namedtuple
 
 
 LineInfo = namedtuple('LineInfo', ['x1', 'y1', 'x2', 'y2', 'center_x', 'center_y', 'length', 'inclination', 'color'])
-ControlInfo = namedtuple('Control', ['u1', 'u2', 'count'])
+LineMeansInfo = namedtuple('LineMeansInfo', ['mean_x', 'mean_y', 'count'])
 
 min_length = 1
 min_inclination = 0.4
 
 
-# TODO Implement kalman or particle filter for a dynamic model of the lanes
+""" TODO Implement kalman or particle filter for a dynamic model of the lanes, maybe this needs to be implemented
+in another node or even a package named lane_filter """
 
-def segments_to_lines(segment_list):
+
+def segment_to_line(segment_list):
+    """
+    Generator to return a LineInfo structure from a segment message, this can be implemented
+    to create an array with line information an easily utilize this array to perform fast vectorized code
+    :param segment_list:
+    :yields: LineInfo object
+    """
 
     for segment in segment_list.segments:
         x1 = segment.pixels_normalized[0].x
@@ -33,104 +42,86 @@ def segments_to_lines(segment_list):
         yield line
 
 
-def line_to_points(line):
-    if line.inclination < 0:
-        in_x = list(range(line.x2, line.x1 + 1))
-        in_y = list(range(line.y2, line.y1 + 1))
-    else:
-        in_x = list(range(line.x1, line.x2 + 1))
-        in_y = list(range(line.y1, line.y2 + 1))
+def unwraps_right(segment_list):
+    """
+    Takes list of segments an returns a line of the filtered segments of the rightmost curve (lane)
+    :param segment_list:
+    :return: Array with segment's start and end point coordinates
+    """
 
-    print(len(in_x), len(in_y))
-    array = np.concatenate((np.array(in_x, ndmin=2), np.array(in_y, ndmin=2)), axis=0)
-    return np.transpose(array)
+    data_array = np.zeros((1, 4))
 
-
-def line_means(segment_list):
-
-    count_valid_line = 0
-    mean_center_x = 0
-    mean_center_y = 0
-
-    for line in segments_to_lines(segment_list):
+    for line in segment_to_line(segment_list):
         if line.inclination == float('inf') or (line.length > min_length
-                                                and abs(line.inclination) > min_inclination):
-            count_valid_line += 1
-            mean_center_x += line.center_x
-            mean_center_y += line.center_y
+                                                and abs(line.inclination) > min_inclination
+                                                and line.center_x > rospy.get_param("~img_size")):
+            vector = np.array([[line.x1, line.x2, line.y1, line.y2]])
+            data_array = np.concatenate((data_array, vector), axis=0)
 
-    if count_valid_line == 0:
-        mean_center_x = 0
-        mean_center_y = 0
-    else:
-        mean_center_x /= count_valid_line
-        mean_center_y /= count_valid_line
-
-    return ControlInfo(u1=mean_center_x, u2=mean_center_y, count=count_valid_line)
-
-
-def get_point_array(segment_list):
-
-    count_valid_line = 0
-    mean_center_x = 0
-    mean_center_y = 0
-    point_list = []
-    point_array = None
-    count = 0
-
-    for line in segments_to_lines(segment_list):
-        if line.inclination == float('inf') or (line.length > min_length
-                                                and abs(line.inclination) > min_inclination):
-            point_list.append(line_to_points(line))
-            count_valid_line += 1
-            mean_center_x += line.center_x
-            mean_center_y += line.center_y
-
-    if count_valid_line == 0:
-        mean_center_x = 0
-        mean_center_y = 0
-    else:
-        point_array = np.concatenate(point_list, axis=0)
-        mean_center_x /= count_valid_line
-        mean_center_y /= count_valid_line
-        count = point_array.shape[0]
-
-    return point_array, count
+    # Index array to erase first row
+    return np.array(data_array[1:])
 
 
 def unwraps_left(segment_list):
+    """
+    Takes list of segments an returns a line of the filtered segments of the leftmost curve (lane)
+    :param segment_list:
+    :return: Array with segment's start and end point coordinates
+    """
 
     data_array = np.zeros((1, 4))
 
-    for line in segments_to_lines(segment_list):
+    for line in segment_to_line(segment_list):
         if line.inclination == float('inf') or (line.length > min_length
-                                                and abs(line.inclination) > min_inclination#):
-                                                and line.center_x < 640):
+                                                and abs(line.inclination) > min_inclination
+                                                and line.center_x < rospy.get_param("~img_size")):
             vector = np.array([[line.x1, line.x2, line.y1, line.y2]])
             data_array = np.concatenate((data_array, vector), axis=0)
 
+    # Index array to erase first row
     return np.array(data_array[1:])
 
 
-def unwraps_right(segment_list):
+def line_means(segment_list):
+    """
+    Returns an named tuple with the information about the mean of the x points and the mean of the y points from
+    the segment list. Take into account that this may be biased to the bottom of the image due to strong
+    appearance of short segments.
+    :param segment_list:
+    :return: Named tuple
+    """
 
-    data_array = np.zeros((1, 4))
+    count_valid_line = 0
+    mean_center_x = 0
+    mean_center_y = 0
 
-    for line in segments_to_lines(segment_list):
+    for line in segment_to_line(segment_list):
         if line.inclination == float('inf') or (line.length > min_length
-                                                and abs(line.inclination) > min_inclination#):
-                                                and line.center_x > 640):
-            vector = np.array([[line.x1, line.x2, line.y1, line.y2]])
-            data_array = np.concatenate((data_array, vector), axis=0)
+                                                and abs(line.inclination) > min_inclination):
+            count_valid_line += 1
+            mean_center_x += line.center_x
+            mean_center_y += line.center_y
 
-    return np.array(data_array[1:])
+    if count_valid_line == 0:
+        mean_center_x = 0
+        mean_center_y = 0
+    else:
+        mean_center_x /= count_valid_line
+        mean_center_y /= count_valid_line
+
+    return LineMeansInfo(mean_x=mean_center_x, mean_y=mean_center_y, count=count_valid_line)
 
 
 def lines_to_array(segment_list):
+    """
+    Filters segments and returns array with the centers of these segments
+    :param segment_list:
+    :return: array of line centers
+    """
 
     data_array = np.zeros((1, 2))
 
-    for line in segments_to_lines(segment_list):
+    for line in segment_to_line(segment_list):
         if line.inclination == float('inf') or (line.length > min_length
                                                 and line.inclination > min_inclination
                                                 and line.center_x < 640):
@@ -138,8 +129,5 @@ def lines_to_array(segment_list):
             vector = np.array([[line.center_x, line.center_y]])
             data_array = np.concatenate((data_array, vector), axis=0)
 
+    # Index array to erase first row
     return np.array(data_array[1:])
-
-
-
-
