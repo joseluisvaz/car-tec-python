@@ -3,8 +3,7 @@ subscriber_topic_2: /line_detector/segment_list
 
 publisher_topic_1: /birds_eye/image
 publisher_topic_2: /birds_eye/image2
-
-segment_warper_sub_1: /line_detector/segment_list
+publisher_topic_3: /birds_eye/segment_list
 
 subs_queue_size: 1
 pubs_queue_size: 1

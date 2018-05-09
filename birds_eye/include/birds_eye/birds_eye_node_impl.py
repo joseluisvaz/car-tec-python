@@ -40,8 +40,12 @@ class BirdsEyeImpl(object):
                                          Image,
                                          queue_size=rospy.get_param("~pubs_queue_size"))
 
-        self.segment_pub = rospy.Publisher(rospy.get_param("~publisher_topic_2"),
-                                           Image,
+        self.image2_pub = rospy.Publisher(rospy.get_param("~publisher_topic_2"),
+                                          Image,
+                                          queue_size=rospy.get_param("~pubs_queue_size"))
+
+        self.segment_pub = rospy.Publisher(rospy.get_param("~publisher_topic_3"),
+                                           SegmentList,
                                            queue_size=rospy.get_param("~pubs_queue_size"))
 
     def callback_image(self, img_msg):
@@ -54,7 +58,7 @@ class BirdsEyeImpl(object):
 
         self.warper.set_image(img)           # Set image for use in callback_segment
         warped_img = self.warper.warp_image(img)
-        print(self.warper.H)
+        #print(self.warper.H)
         ros_image = self.bridge.cv2_to_imgmsg(warped_img, "bgr8")
         self.image_pub.publish(ros_image)
 
@@ -78,9 +82,6 @@ class BirdsEyeImpl(object):
 
         new_img = self.warper.warp_image(self.warper.img)
 
-        p1_color=(0, 255, 0)
-        p2_color=(0, 0, 255)
-
         # TODO: Big refactor and send only the segmens for better speed
         for item in segment_list_msg.segments:
             vec1 = np.array([[int(item.pixels_normalized[0].x)],
@@ -96,13 +97,26 @@ class BirdsEyeImpl(object):
             y2 = stacked[3]
 
             cv2.line(new_img, (x1, y1), (x2, y2), COLOR_RED, 2)
-            if p1_color is not None:
-                cv2.circle(new_img, (x1, y1), 2, p1_color)
-            if p2_color is not None:
-                cv2.circle(new_img, (x2, y2), 2, p2_color)
 
         ros_image = self.bridge.cv2_to_imgmsg(new_img, "bgr8")
-        self.segment_pub.publish(ros_image)
+        self.image2_pub.publish(ros_image)
+
+        # TODO: Big refactor and send only the segmens for better speed
+        for item in segment_list_msg.segments:
+            vec1 = np.array([[int(item.pixels_normalized[0].x)],
+                             [int(item.pixels_normalized[0].y)]])
+            vec2 = np.array([[int(item.pixels_normalized[1].x)],
+                             [int(item.pixels_normalized[1].y)]])
+
+            stacked = np.vstack((self.warp_vector(vec1), self.warp_vector(vec2)))
+
+            item.pixels_normalized[0].x = stacked[0]
+            item.pixels_normalized[0].y = stacked[1]
+            item.pixels_normalized[1].x = stacked[2]
+            item.pixels_normalized[1].y = stacked[3]
+
+        self.segment_pub.publish(segment_list_msg)
+
 
 
 def draw_lines(bgr, lines, paint, p1_color=(0, 255, 0), p2_color=(0, 0, 255)):

@@ -26,15 +26,15 @@ inner_apex2: [1250, 550]
 
 color_config:
   dilatation_kernel_size: 3
-  canny_threshold: [80, 200]
+  canny_threshold: [100, 200]
   hough_threshold: 20
-  hough_min_line_length: 3
-  hough_max_line_gap: 1
+  hough_min_line_length: 20
+  hough_max_line_gap: 30
   sobel_threshold: 40
 
   hsv_white1:  [0,0,150]
   hsv_white2:  [180,50,255]
-  hls_white1:  [0, 170, 0]
+  hls_white1:  [0, 150, 0]
   hls_white2:  [180, 255, 255]
   hsv_yellow1: [25,120,90]
   hsv_yellow2: [45,255,255]
