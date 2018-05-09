@@ -11,5 +11,8 @@ def fit_line(array):
     :return: slope and intercept to the array
     """
 
-    slope, intercept, r_value, p_value, std_err = linregress(array[:, 0], array[:, 1])
-    return Line(slope, intercept)
+    if array.size != 0:
+        slope, intercept, r_value, p_value, std_err = linregress(array[:, 0], array[:, 1])
+        return Line(slope, intercept)
+
+    return None

@@ -27,9 +27,9 @@ LINE_THRESHOLD = 35
 
 class LaneControlImpl(object):
     def __init__(self):
-        self.control_list_x = [480 for x in range(MOVING_MEAN_SIZE)]
-        self.control_list_y = [0 for x in range(MOVING_MEAN_SIZE)]
-        self.centers_list = []
+        self.control_list_x = [480] * MOVING_MEAN_SIZE
+        self.control_list_y = [0] * MOVING_MEAN_SIZE
+        self.dataset_list = []
         self.centers_array = None
 
         self.MESSAGE_COUNTER = 0
@@ -77,17 +77,17 @@ class LaneControlImpl(object):
 
         if self.MESSAGE_COUNTER < LIN_BUFFER:
             self.MESSAGE_COUNTER += 1
-            self.centers_list.append(index_left_segments)
-            self.centers_array = np.concatenate(self.centers_list, axis=0)
+            self.dataset_list.append(index_left_segments)
+            self.centers_array = np.concatenate(self.dataset_list, axis=0)
         elif control_sample.count < LINE_THRESHOLD:
             # HOLDS RESULT OF LAST LINEAR REGRESSION
-            self.centers_list.append(index_left_segments)
-            self.centers_list.pop(0)
-            self.centers_array = np.concatenate(self.centers_list, axis=0)
+            self.dataset_list.append(index_left_segments)
+            self.dataset_list.pop(0)
+            self.centers_array = np.concatenate(self.dataset_list, axis=0)
         else:
-            self.centers_list.append(index_left_segments)
-            self.centers_list.pop(0)
-            self.centers_array = np.concatenate(self.centers_list, axis=0)
+            self.dataset_list.append(index_left_segments)
+            self.dataset_list.pop(0)
+            self.centers_array = np.concatenate(self.dataset_list, axis=0)
 
         # FIXME: FIT LINE TO CENTERS ARRAY OR INDEX_MATRIX
         # FIXME: WHAT HAPPENS WHEN INPUTS ARE EMPTY, NO LINEAR REGRESSION TO CALCULATE
@@ -99,17 +99,13 @@ class LaneControlImpl(object):
         if index_right_segments is not None:
             lane_right = fit_line(index_right_segments)
 
-        if rospy.get_param("~verbose") == 1 \
-                and lane_left is not None \
-                and lane_right is not None:
-
+        if rospy.get_param("~verbose") == 1 and lane_left is not None and lane_right is not None:
             draw_linear_regression(activated_pixels,
                                    lane_left.slope,
                                    lane_right.slope, 
                                    lane_left.intercept, 
                                    lane_right.intercept)
 
-    
         # FIXME: CONTROL STAGE, REFACTOR THIS TO FUNCTION
         self.control_list_x.append(control_sample.mean_x)
         self.control_list_y.append(control_sample.mean_y)
