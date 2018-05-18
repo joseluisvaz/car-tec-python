@@ -86,6 +86,25 @@ def get_left_segments(segment_list):
     return np.array(data_array[1:])
 
 
+def get_correct_segments(segment_list):
+    """
+    Takes list of segments an returns a line of the filtered segments of the leftmost curve (lane)
+    :param segment_list:
+    :return: Array with segment's start and end point coordinates
+    """
+
+    data_array = np.zeros((1, 4))
+
+    for line in segment_to_line(segment_list):
+        if line.inclination == float('inf') or (line.length > min_length
+                                                and abs(line.inclination) > min_inclination):
+            vector = np.array([[line.x1, line.x2, line.y1, line.y2]])
+            data_array = np.concatenate((data_array, vector), axis=0)
+
+    # Index array to erase first row
+    return np.array(data_array[1:])
+
+
 def line_means(segment_list):
     """
     Returns an named tuple with the information about the mean of the x points and the mean of the y points from
