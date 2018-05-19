@@ -59,6 +59,8 @@ class RoiCutter(object):
 
 
         fill_poly(mask, self.vertices)
+
+        # Return prov instead of img for debugging purposes
         prov = 255*np.ones_like(img)
 
-        return cv2.bitwise_and(prov, mask)
+        return cv2.bitwise_and(img, mask)
