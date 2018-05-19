@@ -1,0 +1,46 @@
+subscriber_topic: /webcam/image_raw
+
+publisher_topic_1: /line_detector/output_image
+publisher_topic_2: /line_detector/edges
+publisher_topic_3: /line_detector/threshold_image_white
+publisher_topic_4: /line_detector/threshold_image_yellow
+
+publisher_topic_segments: /line_detector/segment_list
+
+subs_queue_size: 1
+pubs_queue_size: 1
+buff_size: 52428800
+default_sobel_kernel_size: 7
+
+img_size: [480, 640]
+
+# Values for Region of Interest (ROI) Cutter
+left_bottom: [110, 390]
+right_bottom: [550, 390]
+apex1: [280, 240]
+apex2: [380, 240]
+inner_left_bottom: [110, 390]
+inner_right_bottom: [550, 390]
+inner_apex1: [110, 390]
+inner_apex2: [550, 390]
+
+color_config:
+  dilatation_kernel_size: 3
+  canny_threshold: [80, 200]
+  hough_threshold: 20
+  hough_min_line_length: 3
+  hough_max_line_gap: 1
+  sobel_threshold: 40
+
+  hsv_white1:  [0,0,150]
+  hsv_white2:  [180,50,255]
+  hls_white1:  [0, 150, 0]
+  hls_white2:  [180, 255, 255]
+  hsv_yellow1: [25,120,90]
+  hsv_yellow2: [45,255,255]
+  hls_yellow1: [97, 100,50]
+  hls_yellow2: [107,255,240]
+  hsv_red1:    [0,140,100]
+  hsv_red2:    [15,255,255]
+  hsv_red3:    [165,140,100]
+  hsv_red4:    [180,255,255]

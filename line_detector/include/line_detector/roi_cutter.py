@@ -57,6 +57,8 @@ class RoiCutter(object):
 
         mask = np.zeros_like(img)
 
-        fill_poly(mask, self.vertices)
 
-        return cv2.bitwise_and(img, mask)
+        fill_poly(mask, self.vertices)
+        prov = 255*np.ones_like(img)
+
+        return cv2.bitwise_and(prov, mask)
