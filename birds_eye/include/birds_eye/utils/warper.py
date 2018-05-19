@@ -1,4 +1,5 @@
 import cv2
+import rospy
 import numpy as np
 
 from geometry_msgs.msg import Point
@@ -6,7 +7,10 @@ from car_tec_msgs.msg import Pixel
 from car_tec_msgs.msg import Vector2D
 
 AREA_OF_INTEREST_2 = [[150 + 430, 460], [1150 - 440, 460], [1150, 720], [150, 720]]
-AREA_OF_INTEREST = [[580, 290], [700, 290], [1280, 650], [0, 650]]
+AREA_OF_INTEREST_3 = [[580, 290], [700, 290], [1280, 650], [0, 650]]
+
+# apex 1; apex 2; right_bottom; left bottom
+AREA_OF_INTEREST = [[280, 240], [380, 240], [550, 390], [110, 390]]
 
 
 class Warper(object):
@@ -37,9 +41,9 @@ class Warper(object):
         self.img_size = (img.shape[1], img.shape[0])
 
     def set_homography(self, img):
-        offset1 = 200           # offset for dst points x value
-        offset2 = 0             # offset for dst points bottom y value
-        offset3 = 0             # offset for dst points top y value
+        offset1 = rospy.get_param("~offset_x")          # offset for dst points x value
+        offset2 = rospy.get_param("~offset_y_bottom")             # offset for dst points bottom y value
+        offset3 = rospy.get_param("~offset_y_top")             # offset for dst points top y value
 
         if not self.check_img_size(img):
             raise ValueError("img_sizes do not match")

@@ -24,6 +24,8 @@ inner_right_bottom: [550, 390]
 inner_apex1: [110, 390]
 inner_apex2: [550, 390]
 
+offset_x: 250
+
 color_config:
   dilatation_kernel_size: 3
   canny_threshold: [80, 200]
@@ -34,12 +36,12 @@ color_config:
 
   hsv_white1:  [0,0,150]
   hsv_white2:  [180,50,255]
-  hls_white1:  [0, 150, 0]
+  hls_white1:  [0, 200, 0]
   hls_white2:  [180, 255, 255]
   hsv_yellow1: [25,120,90]
   hsv_yellow2: [45,255,255]
-  hls_yellow1: [97, 100,50]
-  hls_yellow2: [107,255,240]
+  hls_yellow1: [95, 80,50]
+  hls_yellow2: [110,255,240]
   hsv_red1:    [0,140,100]
   hsv_red2:    [15,255,255]
   hsv_red3:    [165,140,100]

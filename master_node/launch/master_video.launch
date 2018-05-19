@@ -6,7 +6,7 @@
 
     <!-- INITIALIZE VIEW TRANSFORMATION
     <include file="$(find birds_eye)/launch/segment_warper.launch"/> -->
-    <include file="$(find birds_eye)/launch/segment_warper.launch"/>
+    <include file="$(find birds_eye)/launch/verbose_test.launch"/>
 
     <!-- INITIALIZE LANE CONTROL -->
     <include file="$(find lane_control)/launch/lane_control.launch"/>

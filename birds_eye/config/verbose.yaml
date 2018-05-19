@@ -1,4 +1,4 @@
-subscriber_topic_1: /videofile/image_raw
+subscriber_topic_1: /webcam/image_raw
 subscriber_topic_2: /line_detector/segment_list
 
 publisher_topic_1: /birds_eye/image
