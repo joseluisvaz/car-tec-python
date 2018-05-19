@@ -11,6 +11,7 @@ from car_tec_msgs.msg import SegmentList
 from cv_bridge import CvBridge
 from line_detector_hough import LineDetectorHough
 from line_detector_plot import draw_lines
+from img_functions import draw_ROI
 from utils.segments import to_segment_msg
 
 
@@ -73,6 +74,8 @@ class LineDetectorImpl:
 
         draw_lines(cv_image, white_info.lines, COLOR_RED)
         draw_lines(cv_image, yellow_info.lines, COLOR_GREEN)
+
+        cv_image = draw_ROI(cv_image, self.detector.roi_cutter.vertices)
 
         image_with_lines = self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
         edges_img = self.bridge.cv2_to_imgmsg(self.detector.edges, "mono8")

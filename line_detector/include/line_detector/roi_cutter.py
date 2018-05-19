@@ -56,11 +56,5 @@ class RoiCutter(object):
             raise ValueError
 
         mask = np.zeros_like(img)
-
-
         fill_poly(mask, self.vertices)
-
-        # Return prov instead of img for debugging purposes
-        prov = 255*np.ones_like(img)
-
         return cv2.bitwise_and(img, mask)
