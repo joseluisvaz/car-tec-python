@@ -12,6 +12,6 @@ inner_apex1: [110, 390]
 inner_apex2: [550, 390]
 
 offset_x: 250
-offset_y_bottom: 0
-offset_y_top: 50
+offset_y_bottom: 50
+offset_y_top: -200
 
