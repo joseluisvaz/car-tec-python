@@ -32,7 +32,7 @@ class LaneControlImpl(object):
         self.bridge = CvBridge()
 
         # Wait for sample message and get imagen size
-        self.sample_img_message = rospy.wait_for_message(rospy.get_param("~image_topic_1"), Image)
+        self.sample_img_message = rospy.wait_for_message(rospy.get_param("~image_topic_2"), Image)
         self.sample_cvimg = self.bridge.imgmsg_to_cv2(self.sample_img_message, "bgr8")
         self.sample_img_shape = self.sample_cvimg.shape
 

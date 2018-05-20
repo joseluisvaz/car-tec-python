@@ -52,9 +52,12 @@ def draw_linear_regression_single(activated_pixels, slope, intercept):
 
     offset_x = 0
 
+    y1 = 300
+    y2 = 400
+
     if slope is not None:
-        point1 = (int(450 * slope + intercept) + offset_x, 450)
-        point2 = (int(600 * slope + intercept) + offset_x, 600)
+        point1 = (int(y1 * slope + intercept) + offset_x, y1)
+        point2 = (int(y2 * slope + intercept) + offset_x, y2)
 
         cv2.arrowedLine(activated_pixels,
                         point2,
