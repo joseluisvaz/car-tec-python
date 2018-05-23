@@ -1,7 +1,11 @@
 <launch>
 
     <!-- INITIALIZE LINE DETECTOR (VIDEO, ZED, WEBCAM, BAGFILE ETC)-->
-    <include file="$(find line_detector)/launch/video.launch"/>
+    <!-- <include file="$(find line_detector)/launch/video.launch"/> -->
+    <include file="$(find line_detector)/launch/webcam.launch"/>
+
+    <!-- INITIALIZE ZED CAMERA AND SCANNER-->
+    <include file="$(find obstacle_detector)/launch/scanner.launch"/>
 
     <!-- INITIALIZE VIEW TRANSFORMATION
     <include file="$(find birds_eye)/launch/segment_warper.launch"/> -->

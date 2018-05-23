@@ -1,0 +1,17 @@
+
+img_size: [480, 640]
+
+# Values for Region of Interest (ROI) Cutter
+left_bottom: [110, 390]
+right_bottom: [550, 390]
+apex1: [280, 240]
+apex2: [380, 240]
+inner_left_bottom: [110, 390]
+inner_right_bottom: [550, 390]
+inner_apex1: [110, 390]
+inner_apex2: [550, 390]
+
+offset_x: 100 # 250
+offset_y_bottom: 50
+offset_y_top: -300 # -200
+

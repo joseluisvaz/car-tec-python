@@ -62,3 +62,16 @@ def fill_poly(mask, vertices):
         ignore_mask_color = 255
 
     cv2.fillPoly(mask, vertices, ignore_mask_color)
+
+
+def draw_ROI(img, vertices):
+    mask = np.zeros_like(img)
+    fill_poly(mask, vertices)
+
+    # scale binary image to 255
+    mask *= 255
+
+    # Clear blue and red channels
+    mask[:, :, 0] = 0
+    mask[:, :, 2] = 0
+    return cv2.addWeighted(img, 1, mask, 20, 0)

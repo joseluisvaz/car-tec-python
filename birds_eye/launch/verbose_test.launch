@@ -4,6 +4,7 @@
           name="birds_eye" output="screen"
           clear_params="true" required="true">
         <rosparam command="load" file="$(find birds_eye)/config/verbose.yaml"/>
+        <rosparam command="load" file="$(find line_detector)/config/sizes.yaml"/>
     </node>
 
 </launch>

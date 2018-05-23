@@ -5,6 +5,7 @@
           name="segment_warper" output="screen"
           clear_params="true" required="true">
         <rosparam command="load" file="$(find birds_eye)/config/video_segment_warper.yaml"/>
+        <rosparam command="load" file="$(find line_detector)/config/sizes.yaml"/>
     </node>
 
 </launch>

@@ -73,4 +73,4 @@ class SingleLineTracker(TrackerInterface):
         if rospy.get_param("~verbose") == 1 and lane is not None:
             draw_linear_regression_single(self.activated_pixels, lane.slope, lane.intercept)
 
-        return None
+        return lane
