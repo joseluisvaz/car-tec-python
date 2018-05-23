@@ -1,6 +1,6 @@
 subscriber_topic: /lane_control/control_signal
 
-publisher_topic: /board_connection/control_array
+publisher_topic: /board_connection/control_pos
 
 subs_queue_size: 1
 pubs_queue_size: 1

@@ -54,11 +54,15 @@ def draw_linear_regression_single(activated_pixels, slope, intercept):
 
     y1 = 300
     y2 = 400
+    slice_y = 250
 
     if slope is not None:
         point1 = (int(y1 * slope + intercept) + offset_x, y1)
         point2 = (int(y2 * slope + intercept) + offset_x, y2)
 
+        point_to_follow = (int(slice_y*slope + intercept), slice_y)
+
+        cv2.circle(activated_pixels, point_to_follow, 10, COLOR_RED, thickness=3)
         cv2.arrowedLine(activated_pixels,
                         point2,
                         point1,
