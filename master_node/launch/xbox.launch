@@ -1,0 +1,13 @@
+<launch>
+
+    <!-- INITIALIZE REMOTE CONTROL -->
+    <include file="$(find remote_control)/launch/remote_control.launch"/>
+
+    <!-- INITIALIZE BOARD PUBLISHER -->
+    <include file="$(find board_connection)/launch/board_connection.launch"/>
+
+    <!-- ROSSERIAL NODE COMMUNICATION -->
+    <node pkg="rosserial_python" type="serial_node.py" name="board_node"
+          args="/dev/ttyACM0"/>
+
+</launch>

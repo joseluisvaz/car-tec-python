@@ -1,0 +1,5 @@
+publisher_topic: /lane_control/control_signal
+
+subs_queue_size: 1
+pubs_queue_size: 1
+buff_size: 52428800

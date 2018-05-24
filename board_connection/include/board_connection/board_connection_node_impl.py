@@ -4,8 +4,6 @@ from __future__ import print_function
 
 import rospy
 
-from car_tec_msgs.msg import Segment
-from car_tec_msgs.msg import SegmentList
 from std_msgs.msg import Float32MultiArray
 
 

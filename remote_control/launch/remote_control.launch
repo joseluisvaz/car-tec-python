@@ -1,0 +1,9 @@
+<launch>
+
+    <node pkg="remote_control" type="remote_control_node.py"
+          name="remote_control" output="screen"
+          clear_params="true" required="true">
+        <rosparam command="load" file="$(find remote_control)/config/default.yaml"/>
+    </node>
+
+</launch>
