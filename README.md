@@ -21,7 +21,7 @@ Requirements:
 
 ## MCU Software Repository
 
-The development for the microcontroller software layer of this project is in the repository by [Farid Izar](github.com/faridiz/cartec-mcu)(http://wiki.ros.org)
+The development for the microcontroller software layer of this project is in the repository by [Farid Izar](http://github.com/faridiz/cartec-mcu)
 
 **Author(s): Farid Izar (Main Developer), Andres Gonzalez (Main Developer/Scheduling), Jose Vazquez (MCU ROS Implementation)**
 
