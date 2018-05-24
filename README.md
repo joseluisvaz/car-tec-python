@@ -15,11 +15,16 @@ Requirements:
 **- Python: 3.5.2**
 **- OpenCV: 3.4.0**
 
-**Author(s): Jose Vazquez, Francisco Perez, Mario Valdes, Erick Contreras**
+**Author(s): Jose Vazquez (Main Developer), Farid Izar (xbox control node), Andres Gonzalez (xbox control node)**
 
 **Mainteiner: TBA**
 
-#### Further Documentation
+## MCU Software Repository
+
+The development for the microcontroller software layer of this project is in the repository by [Farid Izar](github.com/faridiz/cartec-mcu)(http://wiki.ros.org)
+
+**Author(s): Farid Izar (Main Developer), Andres Gonzalez (Main Developer/Scheduling), Jose Vazquez (MCU ROS Implementation)**
+
 
 ## Installation
 ### Dependencies
