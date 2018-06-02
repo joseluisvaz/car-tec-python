@@ -57,6 +57,7 @@ def main():
         message = Float32MultiArray()
         message.data = remote_control.get_input_array()
         message.data[0] = (message.data[0] - 127) * 23 / 127
+        message.data[0] *= (-1)
         message.data[1] *= (100.0/255.0)
 
         remote_control.control_pub.publish(message)
